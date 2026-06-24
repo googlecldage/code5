@@ -199,6 +199,53 @@ html
     .gallery-item:hover .gallery-overlay { opacity: 1; }
     .gallery-tag { font-size: .72rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); }
 
+    /* ── VIDEO SECTION ── */
+    .video-section {
+      background: var(--dusk);
+      border-top: 1px solid rgba(255, 255, 255, .05);
+      border-bottom: 1px solid rgba(255, 255, 255, .05);
+    }
+    .video-container {
+      max-width: 900px;
+      margin: 0 auto;
+      border-radius: 1.5rem;
+      overflow: hidden;
+      box-shadow: 0 8px 40px rgba(0, 0, 0, .5);
+      position: relative;
+    }
+    .video-container video {
+      width: 100%;
+      height: auto;
+      display: block;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      background: #000;
+    }
+    .video-overlay-text {
+      position: absolute;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(13, 10, 24, .7);
+      backdrop-filter: blur(4px);
+      padding: .5rem 1.5rem;
+      border-radius: 2rem;
+      font-size: .8rem;
+      color: rgba(255, 255, 255, .5);
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      pointer-events: none;
+      white-space: nowrap;
+    }
+    .video-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+    }
+    .video-header .section-desc {
+      margin: 0 auto;
+      text-align: center;
+    }
+
     /* ── EXPERIENCE ── */
     .experience-section { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
     .exp-visual {
@@ -470,6 +517,7 @@ html
       .test-card { min-width: 260px; max-width: 260px; }
       .cta-buttons { flex-direction: column; align-items: center; }
       .map-container iframe { height: 250px; }
+      .video-overlay-text { font-size: .6rem; padding: .3rem 1rem; white-space: normal; }
     }
   </style>
 </head>
@@ -524,6 +572,22 @@ html
     <div class="stat"><div class="stat-num">9.8</div><div class="stat-label" data-i18n="stat3"></div></div>
     <div class="stat"><div class="stat-num">12</div><div class="stat-label" data-i18n="stat4"></div></div>
   </div>
+
+  <!-- VIDEO SECTION -->
+  <section class="video-section" id="video">
+    <div class="video-header">
+      <div class="section-label" data-i18n="video_label"></div>
+      <h2 class="section-title" data-i18n="video_title"></h2>
+      <p class="section-desc" data-i18n="video_desc"></p>
+    </div>
+    <div class="video-container">
+      <video autoplay muted loop playsinline>
+        <source src="https://res.cloudinary.com/dyeklznvg/video/upload/v1782320431/91e047b93bf6d168fdd24d7989a2d68f_jizitu.mp4" type="video/mp4" />
+        Your browser does not support the video tag.
+      </video>
+      <div class="video-overlay-text">✦ تجربة البالون ✦</div>
+    </div>
+  </section>
 
   <!-- GALLERY -->
   <section class="gallery-section" id="gallery">
@@ -676,7 +740,7 @@ html
         <span class="wa-icon">💬</span>
         <span data-i18n="whatsapp_btn"></span>
       </a>
-      <a href="https://t.me/@newsendmessages" class="telegram-btn" target="_blank">
+      <a href="https://t.me/AtlasBallooning" class="telegram-btn" target="_blank">
         <span class="tg-icon">✈️</span>
         <span data-i18n="telegram_btn"></span>
       </a>
@@ -685,7 +749,7 @@ html
       📧 <a href="mailto:emailconsulting3600@gmail.com">emailconsulting3600@gmail.com</a>
     </div>
     <p style="margin-top:1.5rem;font-size:.83rem;color:rgba(245,240,234,.3)">
-      <span data-i18n="phone_label"></span> +212 663 531 691 &nbsp;·&nbsp; <span data-i18n="available"></span>
+      <span data-i18n="phone_label"></span> <span class="phone-number" data-i18n="phone_number"></span> &nbsp;·&nbsp; <span data-i18n="available"></span>
     </p>
   </section>
 
@@ -710,6 +774,7 @@ html
         hero_p:"رحلات بالون هوائي فاخرة عند شروق الشمس — حيث ينتهي العالم ويبدأ السحر",
         hero_cta1:"احجز تجربتك الآن", hero_cta2:"شاهد المعرض", scroll_hint:"اكتشف",
         stat1:"رحلة ناجحة", stat2:"دولة تمثّل ضيوفنا", stat3:"تقييم الضيوف / 10", stat4:"سنة خبرة",
+        video_label:"فيديو تعريفي", video_title:"شاهد <span>تجربة</span> البالون", video_desc:"استمتع بمشاهدة لحظات ساحرة من رحلات البالون الهوائي في سماء مراكش",
         gallery_label:"معرض الصور", gallery_title:"لحظات <span>لا تُعوَّض</span>", gallery_desc:"كل رحلة قصة بصرية فريدة — من لهيب البالون الدافئ إلى الأفق اللانهائي",
         gtag1:"لحظة الإطلاق", gtag2:"علوّ الأسرار", gtag3:"الصحراء من الأعلى", gtag4:"أسطول البالونات",
         badge_safe:"آمان مُعتمَد",
@@ -732,7 +797,7 @@ html
         t1_text:'"تجربة غيّرت مفهومي للسفر. اللحظة التي بدأ البالون يرتفع شعرت أنني في حلم!"',
         t5_text:'"أخذنا العائلة كلها، الأطفال كانوا مبهورين! فريق استثنائي ولحظات لا تُمحى."',
         cta_label:"تواصل معنا", cta_title:"جاهز لتحليق <span>حلمك</span>؟", cta_desc:"احجز الآن عبر واتساب أو تلغرام — نرد خلال دقائق ونُرتّب كل شيء من أجلك",
-        whatsapp_btn:"واتساب", telegram_btn:"تلغرام", phone_label:"📞 هاتف:", available:"متاح 7 أيام في الأسبوع",
+        whatsapp_btn:"واتساب", telegram_btn:"تلغرام", phone_label:"📞 هاتف:", phone_number:"0663531691", available:"متاح 7 أيام في الأسبوع",
         footer_copy:"© 2026 Atlas Ballooning — جميع الحقوق محفوظة", footer_privacy:"سياسة الخصوصية", footer_terms:"الشروط والأحكام", footer_contact:"تواصل معنا"
       },
       fr: {
@@ -742,6 +807,7 @@ html
         hero_p:"Vols en montgolfière de luxe au lever du soleil — là où le monde s'arrête et la magie commence",
         hero_cta1:"Réserver maintenant", hero_cta2:"Voir la galerie", scroll_hint:"Découvrir",
         stat1:"Vols réussis", stat2:"Nationalités à bord", stat3:"Note clients / 10", stat4:"Ans d'expérience",
+        video_label:"Vidéo", video_title:"Regardez <span>l'expérience</span> en vol", video_desc:"Découvrez des moments magiques de nos vols en montgolfière dans le ciel de Marrakech",
         gallery_label:"Galerie photos", gallery_title:"Instants <span>inoubliables</span>", gallery_desc:"Chaque vol est une histoire visuelle unique — de la flamme chaleureuse à l'horizon sans fin",
         gtag1:"Instant de décollage", gtag2:"Altitude des secrets", gtag3:"Le désert vu du ciel", gtag4:"Flotte de montgolfières",
         badge_safe:"Sécurité certifiée",
@@ -764,7 +830,7 @@ html
         t1_text:'"Une expérience qui a changé ma vision du voyage. Le moment où la montgolfière s\'est élevée, j\'étais dans un rêve!"',
         t5_text:'"Toute la famille était émerveillée ! Une équipe extraordinaire et des souvenirs impérissables."',
         cta_label:"Contactez-nous", cta_title:"Prêt à vivre votre <span>rêve</span> ?", cta_desc:"Réservez maintenant via WhatsApp ou Telegram — nous répondons en quelques minutes et organisons tout pour vous",
-        whatsapp_btn:"WhatsApp", telegram_btn:"Telegram", phone_label:"📞 Tél:", available:"Disponible 7 jours / 7",
+        whatsapp_btn:"WhatsApp", telegram_btn:"Telegram", phone_label:"📞 Tél:", phone_number:"+212 6 63 53 16 91", available:"Disponible 7 jours / 7",
         footer_copy:"© 2026 Atlas Ballooning — Tous droits réservés", footer_privacy:"Politique de confidentialité", footer_terms:"Conditions générales", footer_contact:"Contact"
       },
       en: {
@@ -774,6 +840,7 @@ html
         hero_p:"Luxury hot air balloon rides at sunrise — where the world ends and magic begins",
         hero_cta1:"Book your experience", hero_cta2:"View gallery", scroll_hint:"Discover",
         stat1:"Successful flights", stat2:"Countries represented", stat3:"Guest rating / 10", stat4:"Years of experience",
+        video_label:"Video", video_title:"Watch the <span>balloon</span> experience", video_desc:"Enjoy magical moments from our hot air balloon flights over Marrakech's sky",
         gallery_label:"Photo gallery", gallery_title:"<span>Unforgettable</span> moments", gallery_desc:"Every flight is a unique visual story — from the warm balloon flame to the endless horizon",
         gtag1:"Launch moment", gtag2:"Altitude secrets", gtag3:"Desert from above", gtag4:"Balloon fleet",
         badge_safe:"Certified safety",
@@ -796,7 +863,7 @@ html
         t1_text:'"An experience that changed the way I think about travel. The moment the balloon lifted, I felt I was in a dream!"',
         t5_text:'"We brought the whole family — the kids were amazed! An extraordinary team and memories that will last forever."',
         cta_label:"Get in touch", cta_title:"Ready to fly your <span>dream</span>?", cta_desc:"Book now via WhatsApp or Telegram — we reply within minutes and arrange everything for you",
-        whatsapp_btn:"WhatsApp", telegram_btn:"Telegram", phone_label:"📞 Phone:", available:"Available 7 days a week",
+        whatsapp_btn:"WhatsApp", telegram_btn:"Telegram", phone_label:"📞 Phone:", phone_number:"+212 6 63 53 16 91", available:"Available 7 days a week",
         footer_copy:"© 2026 Atlas Ballooning — All rights reserved", footer_privacy:"Privacy policy", footer_terms:"Terms & conditions", footer_contact:"Contact"
       },
       es: {
@@ -806,6 +873,7 @@ html
         hero_p:"Vuelos en globo aerostático de lujo al amanecer — donde el mundo termina y la magia comienza",
         hero_cta1:"Reserva tu experiencia", hero_cta2:"Ver galería", scroll_hint:"Descubrir",
         stat1:"Vuelos exitosos", stat2:"Países representados", stat3:"Valoración / 10", stat4:"Años de experiencia",
+        video_label:"Vídeo", video_title:"Mira la <span>experiencia</span> en globo", video_desc:"Disfruta de momentos mágicos de nuestros vuelos en globo sobre el cielo de Marrakech",
         gallery_label:"Galería de fotos", gallery_title:"Momentos <span>únicos</span>", gallery_desc:"Cada vuelo es una historia visual única — desde la llama cálida del globo hasta el horizonte infinito",
         gtag1:"Momento del despegue", gtag2:"Secretos a gran altura", gtag3:"El desierto desde arriba", gtag4:"Flota de globos",
         badge_safe:"Seguridad certificada",
@@ -828,7 +896,7 @@ html
         t1_text:'"¡Una experiencia que cambió mi forma de ver los viajes! Cuando el globo empezó a subir sentí que volaba en un sueño."',
         t5_text:'"¡Llevamos a toda la familia, los niños estaban fascinados! Un equipo extraordinario y recuerdos para toda la vida."',
         cta_label:"Contáctenos", cta_title:"¿Listo para volar tu <span>sueño</span>?", cta_desc:"Reserva ahora por WhatsApp o Telegram — respondemos en minutos y organizamos todo por ti",
-        whatsapp_btn:"WhatsApp", telegram_btn:"Telegram", phone_label:"📞 Teléfono:", available:"Disponible los 7 días de la semana",
+        whatsapp_btn:"WhatsApp", telegram_btn:"Telegram", phone_label:"📞 Teléfono:", phone_number:"+212 6 63 53 16 91", available:"Disponible los 7 días de la semana",
         footer_copy:"© 2026 Atlas Ballooning — Todos los derechos reservados", footer_privacy:"Política de privacidad", footer_terms:"Términos y condiciones", footer_contact:"Contacto"
       }
     };
@@ -845,7 +913,14 @@ html
 
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
-        if (t[key] !== undefined) el.innerHTML = t[key];
+        if (t[key] !== undefined) {
+          // Handle phone number separately to ensure proper formatting
+          if (key === 'phone_number' && lang === 'ar') {
+            el.textContent = '0663531691';
+          } else {
+            el.innerHTML = t[key];
+          }
+        }
       });
 
       document.querySelectorAll('.lang-btn').forEach(btn => {
