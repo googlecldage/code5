@@ -4,7 +4,7 @@ html
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SkyDream — Hot Air Balloon Experience</title>
+  <title>Atlas Ballooning — Hot Air Balloon Experience</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Cairo:wght@300;400;600;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
   <style>
     /* ── RESET & ROOT ── */
@@ -317,16 +317,50 @@ html
     }
     .cta-section .section-title { font-size: clamp(2.2rem, 5vw, 4rem); max-width: 700px; margin: 0 auto 1rem; }
     .cta-section .section-desc { margin: 0 auto 2.5rem; text-align: center; }
-    .whatsapp-btn {
+
+    .cta-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+
+    .whatsapp-btn, .telegram-btn {
       display: inline-flex; align-items: center; gap: .75rem;
-      background: #25D366; color: #fff; padding: 1rem 2.8rem;
+      color: #fff; padding: 1rem 2.8rem;
       border-radius: 3rem; text-decoration: none;
       font-family: 'Cairo', 'Inter', sans-serif; font-size: 1.1rem; font-weight: 700;
-      box-shadow: 0 8px 32px rgba(37, 211, 102, .3);
       transition: transform .25s, box-shadow .25s;
     }
-    .whatsapp-btn:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(37, 211, 102, .45); }
-    .wa-icon { font-size: 1.4rem; }
+    .whatsapp-btn {
+      background: #25D366;
+      box-shadow: 0 8px 32px rgba(37, 211, 102, .3);
+    }
+    .whatsapp-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 40px rgba(37, 211, 102, .45);
+    }
+    .telegram-btn {
+      background: #0088cc;
+      box-shadow: 0 8px 32px rgba(0, 136, 204, .3);
+    }
+    .telegram-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 40px rgba(0, 136, 204, .45);
+    }
+    .wa-icon, .tg-icon { font-size: 1.6rem; }
+
+    .cta-email {
+      margin-top: 1.5rem;
+      font-size: 1rem;
+      color: rgba(245, 240, 234, .5);
+    }
+    .cta-email a {
+      color: var(--gold);
+      text-decoration: none;
+      transition: color .3s;
+    }
+    .cta-email a:hover { color: var(--flame); }
 
     /* ── FOOTER ── */
     footer {
@@ -356,6 +390,7 @@ html
       .gallery-grid { grid-template-columns: 1fr; }
       .stats-band { flex-direction: column; text-align: center; }
       .test-card { min-width: 260px; max-width: 260px; }
+      .cta-buttons { flex-direction: column; align-items: center; }
     }
   </style>
 </head>
@@ -371,7 +406,7 @@ html
 
   <!-- NAV -->
   <nav>
-    <div class="logo">Sky<span>Dream</span></div>
+    <div class="logo">Atlas<span>Ballooning</span></div>
     <ul>
       <li><a href="#gallery" data-i18n="nav_gallery"></a></li>
       <li><a href="#experience" data-i18n="nav_experience"></a></li>
@@ -518,16 +553,27 @@ html
     <div class="section-label" data-i18n="cta_label"></div>
     <h2 class="section-title" data-i18n="cta_title"></h2>
     <p class="section-desc" data-i18n="cta_desc"></p>
-    <a href="https://wa.me/212663531691" class="whatsapp-btn" target="_blank">
-      <span class="wa-icon">💬</span>
-      <span data-i18n="whatsapp_btn"></span>
-    </a>
-    <p style="margin-top:1.5rem;font-size:.83rem;color:rgba(245,240,234,.3)">+212 663 531 691 &nbsp;·&nbsp; <span data-i18n="available"></span></p>
+    <div class="cta-buttons">
+      <a href="https://wa.me/212663531691" class="whatsapp-btn" target="_blank">
+        <span class="wa-icon">💬</span>
+        <span data-i18n="whatsapp_btn"></span>
+      </a>
+      <a href="https://t.me/AtlasBallooning" class="telegram-btn" target="_blank">
+        <span class="tg-icon">✈️</span>
+        <span data-i18n="telegram_btn"></span>
+      </a>
+    </div>
+    <div class="cta-email">
+      📧 <a href="mailto:emailconsulting3600@gmail.com">emailconsulting3600@gmail.com</a>
+    </div>
+    <p style="margin-top:1.5rem;font-size:.83rem;color:rgba(245,240,234,.3)">
+      +212 663 531 691 &nbsp;·&nbsp; <span data-i18n="available"></span>
+    </p>
   </section>
 
   <!-- FOOTER -->
   <footer>
-    <div class="logo" style="font-size:1.2rem">Sky<span>Dream</span></div>
+    <div class="logo" style="font-size:1.2rem">Atlas<span>Ballooning</span></div>
     <p data-i18n="footer_copy"></p>
     <div class="footer-links">
       <a href="#" data-i18n="footer_privacy"></a>
@@ -549,7 +595,7 @@ html
         gallery_label:"معرض الصور", gallery_title:"لحظات <span>لا تُعوَّض</span>", gallery_desc:"كل رحلة قصة بصرية فريدة — من لهيب البالون الدافئ إلى الأفق اللانهائي",
         gtag1:"لحظة الإطلاق", gtag2:"علوّ الأسرار", gtag3:"الصحراء من الأعلى", gtag4:"أسطول البالونات",
         badge_safe:"آمان مُعتمَد",
-        exp_label:"لماذا SkyDream", exp_title:"تجربة <span>استثنائية</span><br/>من البداية للنهاية", exp_desc:"نُصمّم كل تفصيلة بعناية — من استقبالك قبل الفجر حتى احتفالك بعد الهبوط",
+        exp_label:"لماذا Atlas Ballooning", exp_title:"تجربة <span>استثنائية</span><br/>من البداية للنهاية", exp_desc:"نُصمّم كل تفصيلة بعناية — من استقبالك قبل الفجر حتى احتفالك بعد الهبوط",
         f1_title:"إطلاق عند شروق الشمس", f1_desc:"توقيت مدروس لمنحك أجمل ألوان الأفق وأهدأ الرياح",
         f2_title:"طيارون خبراء مرخّصون", f2_desc:"أكثر من 5000 ساعة طيران لكل قائد — سلامتك أولويتنا",
         f3_title:"إفطار فاخر بعد الهبوط", f3_desc:"احتفل بتجربتك بمائدة راقية في قلب الطبيعة",
@@ -564,9 +610,9 @@ html
         test_label:"آراء ضيوفنا", test_title:"ماذا قالوا عن <span>تجربتهم</span>",
         t1_text:'"تجربة غيّرت مفهومي للسفر. اللحظة التي بدأ البالون يرتفع شعرت أنني في حلم!"',
         t5_text:'"أخذنا العائلة كلها، الأطفال كانوا مبهورين! فريق استثنائي ولحظات لا تُمحى."',
-        cta_label:"تواصل معنا", cta_title:"جاهز لتحليق <span>حلمك</span>؟", cta_desc:"احجز الآن عبر واتساب — نرد خلال دقائق ونُرتّب كل شيء من أجلك",
-        whatsapp_btn:"تواصل عبر واتساب", available:"متاح 7 أيام في الأسبوع",
-        footer_copy:"© 2025 SkyDream — جميع الحقوق محفوظة", footer_privacy:"سياسة الخصوصية", footer_terms:"الشروط والأحكام", footer_contact:"تواصل معنا"
+        cta_label:"تواصل معنا", cta_title:"جاهز لتحليق <span>حلمك</span>؟", cta_desc:"احجز الآن عبر واتساب أو تلغرام — نرد خلال دقائق ونُرتّب كل شيء من أجلك",
+        whatsapp_btn:"واتساب", telegram_btn:"تلغرام", available:"متاح 7 أيام في الأسبوع",
+        footer_copy:"© 2025 Atlas Ballooning — جميع الحقوق محفوظة", footer_privacy:"سياسة الخصوصية", footer_terms:"الشروط والأحكام", footer_contact:"تواصل معنا"
       },
       fr: {
         nav_gallery:"Galerie", nav_experience:"Expérience", nav_packages:"Forfaits", nav_book:"Réserver",
@@ -578,7 +624,7 @@ html
         gallery_label:"Galerie photos", gallery_title:"Instants <span>inoubliables</span>", gallery_desc:"Chaque vol est une histoire visuelle unique — de la flamme chaleureuse à l'horizon sans fin",
         gtag1:"Instant de décollage", gtag2:"Altitude des secrets", gtag3:"Le désert vu du ciel", gtag4:"Flotte de montgolfières",
         badge_safe:"Sécurité certifiée",
-        exp_label:"Pourquoi SkyDream", exp_title:"Une expérience <span>exceptionnelle</span><br/>du début à la fin", exp_desc:"Nous concevons chaque détail avec soin — de votre accueil avant l'aube jusqu'à votre célébration après l'atterrissage",
+        exp_label:"Pourquoi Atlas Ballooning", exp_title:"Une expérience <span>exceptionnelle</span><br/>du début à la fin", exp_desc:"Nous concevons chaque détail avec soin — de votre accueil avant l'aube jusqu'à votre célébration après l'atterrissage",
         f1_title:"Décollage au lever du soleil", f1_desc:"Un timing étudié pour vous offrir les plus belles couleurs du ciel",
         f2_title:"Pilotes experts certifiés", f2_desc:"Plus de 5 000 heures de vol par pilote — votre sécurité est notre priorité",
         f3_title:"Petit-déjeuner gastronomique", f3_desc:"Célébrez votre vol avec une table raffinée au cœur de la nature",
@@ -593,9 +639,9 @@ html
         test_label:"Avis de nos voyageurs", test_title:"Ce qu'ils disent de leur <span>expérience</span>",
         t1_text:'"Une expérience qui a changé ma vision du voyage. Le moment où la montgolfière s\'est élevée, j\'étais dans un rêve!"',
         t5_text:'"Toute la famille était émerveillée ! Une équipe extraordinaire et des souvenirs impérissables."',
-        cta_label:"Contactez-nous", cta_title:"Prêt à vivre votre <span>rêve</span> ?", cta_desc:"Réservez maintenant via WhatsApp — nous répondons en quelques minutes et organisons tout pour vous",
-        whatsapp_btn:"Contacter via WhatsApp", available:"Disponible 7 jours / 7",
-        footer_copy:"© 2025 SkyDream — Tous droits réservés", footer_privacy:"Politique de confidentialité", footer_terms:"Conditions générales", footer_contact:"Contact"
+        cta_label:"Contactez-nous", cta_title:"Prêt à vivre votre <span>rêve</span> ?", cta_desc:"Réservez maintenant via WhatsApp ou Telegram — nous répondons en quelques minutes et organisons tout pour vous",
+        whatsapp_btn:"WhatsApp", telegram_btn:"Telegram", available:"Disponible 7 jours / 7",
+        footer_copy:"© 2025 Atlas Ballooning — Tous droits réservés", footer_privacy:"Politique de confidentialité", footer_terms:"Conditions générales", footer_contact:"Contact"
       },
       en: {
         nav_gallery:"Gallery", nav_experience:"Experience", nav_packages:"Packages", nav_book:"Book Now",
@@ -607,7 +653,7 @@ html
         gallery_label:"Photo gallery", gallery_title:"<span>Unforgettable</span> moments", gallery_desc:"Every flight is a unique visual story — from the warm balloon flame to the endless horizon",
         gtag1:"Launch moment", gtag2:"Altitude secrets", gtag3:"Desert from above", gtag4:"Balloon fleet",
         badge_safe:"Certified safety",
-        exp_label:"Why SkyDream", exp_title:"An <span>exceptional</span> experience<br/>from start to finish", exp_desc:"We design every detail with care — from your pre-dawn welcome to your post-landing celebration",
+        exp_label:"Why Atlas Ballooning", exp_title:"An <span>exceptional</span> experience<br/>from start to finish", exp_desc:"We design every detail with care — from your pre-dawn welcome to your post-landing celebration",
         f1_title:"Sunrise launch", f1_desc:"Perfect timing to give you the most beautiful sky colours and gentlest winds",
         f2_title:"Licensed expert pilots", f2_desc:"Over 5,000 flight hours per pilot — your safety is our top priority",
         f3_title:"Gourmet post-flight breakfast", f3_desc:"Celebrate your experience with an elegant table in the heart of nature",
@@ -622,9 +668,9 @@ html
         test_label:"Guest reviews", test_title:"What they said about their <span>experience</span>",
         t1_text:'"An experience that changed the way I think about travel. The moment the balloon lifted, I felt I was in a dream!"',
         t5_text:'"We brought the whole family — the kids were amazed! An extraordinary team and memories that will last forever."',
-        cta_label:"Get in touch", cta_title:"Ready to fly your <span>dream</span>?", cta_desc:"Book now via WhatsApp — we reply within minutes and arrange everything for you",
-        whatsapp_btn:"Contact via WhatsApp", available:"Available 7 days a week",
-        footer_copy:"© 2025 SkyDream — All rights reserved", footer_privacy:"Privacy policy", footer_terms:"Terms & conditions", footer_contact:"Contact"
+        cta_label:"Get in touch", cta_title:"Ready to fly your <span>dream</span>?", cta_desc:"Book now via WhatsApp or Telegram — we reply within minutes and arrange everything for you",
+        whatsapp_btn:"WhatsApp", telegram_btn:"Telegram", available:"Available 7 days a week",
+        footer_copy:"© 2025 Atlas Ballooning — All rights reserved", footer_privacy:"Privacy policy", footer_terms:"Terms & conditions", footer_contact:"Contact"
       },
       es: {
         nav_gallery:"Galería", nav_experience:"Experiencia", nav_packages:"Paquetes", nav_book:"Reservar",
@@ -636,7 +682,7 @@ html
         gallery_label:"Galería de fotos", gallery_title:"Momentos <span>únicos</span>", gallery_desc:"Cada vuelo es una historia visual única — desde la llama cálida del globo hasta el horizonte infinito",
         gtag1:"Momento del despegue", gtag2:"Secretos a gran altura", gtag3:"El desierto desde arriba", gtag4:"Flota de globos",
         badge_safe:"Seguridad certificada",
-        exp_label:"Por qué SkyDream", exp_title:"Una experiencia <span>excepcional</span><br/>de principio a fin", exp_desc:"Diseñamos cada detalle con cuidado — desde su bienvenida antes del amanecer hasta la celebración tras el aterrizaje",
+        exp_label:"Por qué Atlas Ballooning", exp_title:"Una experiencia <span>excepcional</span><br/>de principio a fin", exp_desc:"Diseñamos cada detalle con cuidado — desde su bienvenida antes del amanecer hasta la celebración tras el aterrizaje",
         f1_title:"Despegue al amanecer", f1_desc:"Timing perfecto para ofrecerle los colores más bellos del cielo",
         f2_title:"Pilotos expertos certificados", f2_desc:"Más de 5.000 horas de vuelo por piloto — su seguridad es nuestra prioridad",
         f3_title:"Desayuno gourmet post-vuelo", f3_desc:"Celebre su experiencia con una mesa elegante en plena naturaleza",
@@ -651,9 +697,9 @@ html
         test_label:"Opiniones de nuestros viajeros", test_title:"Lo que dijeron de su <span>experiencia</span>",
         t1_text:'"¡Una experiencia que cambió mi forma de ver los viajes! Cuando el globo empezó a subir sentí que volaba en un sueño."',
         t5_text:'"¡Llevamos a toda la familia, los niños estaban fascinados! Un equipo extraordinario y recuerdos para toda la vida."',
-        cta_label:"Contáctenos", cta_title:"¿Listo para volar tu <span>sueño</span>?", cta_desc:"Reserva ahora por WhatsApp — respondemos en minutos y organizamos todo por ti",
-        whatsapp_btn:"Contactar por WhatsApp", available:"Disponible los 7 días de la semana",
-        footer_copy:"© 2025 SkyDream — Todos los derechos reservados", footer_privacy:"Política de privacidad", footer_terms:"Términos y condiciones", footer_contact:"Contacto"
+        cta_label:"Contáctenos", cta_title:"¿Listo para volar tu <span>sueño</span>?", cta_desc:"Reserva ahora por WhatsApp o Telegram — respondemos en minutos y organizamos todo por ti",
+        whatsapp_btn:"WhatsApp", telegram_btn:"Telegram", available:"Disponible los 7 días de la semana",
+        footer_copy:"© 2025 Atlas Ballooning — Todos los derechos reservados", footer_privacy:"Política de privacidad", footer_terms:"Términos y condiciones", footer_contact:"Contacto"
       }
     };
 
