@@ -1,4 +1,3 @@
-html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -149,7 +148,7 @@ html
     .stat-label { font-size: .78rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(245, 240, 234, .5); margin-top: .3rem; }
 
     /* ── SECTIONS ── */
-    section { padding: 7rem 5%; }
+    section { padding: 5rem 5%; }
     .section-label { font-size: .73rem; font-weight: 700; letter-spacing: 4px; text-transform: uppercase; color: var(--flame); margin-bottom: .8rem; }
     .section-title { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 700; line-height: 1.2; color: #fff; margin-bottom: 1.2rem; }
     .section-title span { color: var(--gold); }
@@ -157,7 +156,7 @@ html
 
     /* ── GALLERY ── */
     .gallery-section { background: var(--dusk); }
-    .gallery-header { max-width: 600px; margin-bottom: 3.5rem; }
+    .gallery-header { max-width: 600px; margin-bottom: 3rem; }
     .gallery-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -177,24 +176,15 @@ html
     .gallery-item:nth-child(2) { grid-column: 3; grid-row: 1; }
     .gallery-item:nth-child(3) { grid-column: 1; grid-row: 2; }
     .gallery-item:nth-child(4) { grid-column: 2 / 4; grid-row: 2; }
-
     .gallery-item img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-      transition: transform 0.4s ease;
+      width: 100%; height: 100%; object-fit: cover; display: block; transition: transform 0.4s ease;
     }
     .gallery-item:hover img { transform: scale(1.05); }
-
     .gallery-overlay {
       position: absolute; inset: 0;
       background: linear-gradient(to top, rgba(13, 10, 24, .75) 0%, transparent 60%);
-      opacity: 0;
-      transition: opacity .3s;
-      display: flex;
-      align-items: flex-end;
-      padding: 1.2rem;
+      opacity: 0; transition: opacity .3s;
+      display: flex; align-items: flex-end; padding: 1.2rem;
     }
     .gallery-item:hover .gallery-overlay { opacity: 1; }
     .gallery-tag { font-size: .72rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--gold); }
@@ -206,76 +196,28 @@ html
       border-bottom: 1px solid rgba(255, 255, 255, .05);
     }
     .video-container {
-      max-width: 900px;
-      margin: 0 auto;
-      border-radius: 1.5rem;
-      overflow: hidden;
+      max-width: 900px; margin: 0 auto;
+      border-radius: 1.5rem; overflow: hidden;
       box-shadow: 0 8px 40px rgba(0, 0, 0, .5);
       position: relative;
     }
     .video-container video {
-      width: 100%;
-      height: auto;
-      display: block;
-      aspect-ratio: 16/9;
-      object-fit: cover;
-      background: #000;
+      width: 100%; height: auto; display: block;
+      aspect-ratio: 16/9; object-fit: cover; background: #000;
     }
     .video-overlay-text {
-      position: absolute;
-      bottom: 2rem;
-      left: 50%;
-      transform: translateX(-50%);
-      background: rgba(13, 10, 24, .7);
-      backdrop-filter: blur(4px);
-      padding: .5rem 1.5rem;
-      border-radius: 2rem;
-      font-size: .8rem;
-      color: rgba(255, 255, 255, .5);
-      letter-spacing: 2px;
-      text-transform: uppercase;
-      pointer-events: none;
-      white-space: nowrap;
+      position: absolute; bottom: 2rem; left: 50%; transform: translateX(-50%);
+      background: rgba(13, 10, 24, .7); backdrop-filter: blur(4px);
+      padding: .5rem 1.5rem; border-radius: 2rem;
+      font-size: .8rem; color: rgba(255, 255, 255, .5);
+      letter-spacing: 2px; text-transform: uppercase;
+      pointer-events: none; white-space: nowrap;
     }
-    .video-header {
-      text-align: center;
-      margin-bottom: 2.5rem;
-    }
-    .video-header .section-desc {
-      margin: 0 auto;
-      text-align: center;
-    }
+    .video-header { text-align: center; margin-bottom: 2.5rem; }
+    .video-header .section-desc { margin: 0 auto; text-align: center; }
 
     /* ── EXPERIENCE ── */
     .experience-section { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
-    .exp-visual {
-      position: relative;
-      border-radius: 2rem;
-      overflow: hidden;
-      aspect-ratio: 3/4;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .exp-visual img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    .exp-badge {
-      position: absolute;
-      bottom: 2rem;
-      background: var(--flame);
-      padding: 1rem 1.5rem;
-      border-radius: 1rem;
-      text-align: center;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, .5);
-    }
-    [dir="ltr"] .exp-badge { right: -1rem; }
-    [dir="rtl"] .exp-badge { left: -1rem; }
-    .exp-badge strong { display: block; font-size: 2rem; font-weight: 900; color: #fff; line-height: 1; }
-    .exp-badge span { font-size: .68rem; letter-spacing: 2px; text-transform: uppercase; color: rgba(255, 255, 255, .75); }
     .exp-features { margin-top: 2.5rem; display: flex; flex-direction: column; gap: 1.2rem; }
     .feature-row {
       display: flex; align-items: flex-start; gap: 1rem;
@@ -293,82 +235,32 @@ html
     .feature-text strong { display: block; font-size: 1rem; font-weight: 700; color: #fff; margin-bottom: .2rem; }
     .feature-text p { font-size: .87rem; color: rgba(245, 240, 234, .55); line-height: 1.6; }
 
+    /* experience image — no badge, just clean visual */
+    .exp-visual {
+      border-radius: 2rem; overflow: hidden;
+      aspect-ratio: 3/4;
+    }
+    .exp-visual img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
     /* ── TRANSPORT SECTION ── */
     .transport-section {
       background: var(--dusk);
       border-top: 1px solid rgba(255, 255, 255, .05);
       border-bottom: 1px solid rgba(255, 255, 255, .05);
     }
-    .transport-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 3rem;
-      align-items: center;
-    }
-    .transport-image {
-      border-radius: 1.5rem;
-      overflow: hidden;
-      aspect-ratio: 4/3;
-    }
-    .transport-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    .transport-content .section-desc {
-      max-width: 100%;
-    }
-    .transport-features {
-      margin-top: 1.5rem;
-      display: flex;
-      flex-direction: column;
-      gap: 0.8rem;
-    }
+    .transport-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+    .transport-image { border-radius: 1.5rem; overflow: hidden; aspect-ratio: 4/3; }
+    .transport-image img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .transport-content .section-desc { max-width: 100%; }
+    .transport-features { margin-top: 1.5rem; display: flex; flex-direction: column; gap: 0.8rem; }
     .transport-features li {
-      display: flex;
-      align-items: center;
-      gap: 0.8rem;
-      font-size: 0.95rem;
-      color: rgba(245, 240, 234, .7);
-      list-style: none;
-    }
-    .transport-features li::before {
-      content: '🚐';
-      font-size: 1.2rem;
-    }
-
-    /* ── MAP SECTION ── */
-    .map-section {
-      background: var(--night);
-      border-top: 1px solid rgba(255, 255, 255, .05);
-    }
-    .map-container {
-      border-radius: 1.5rem;
-      overflow: hidden;
-      box-shadow: 0 8px 32px rgba(0, 0, 0, .4);
-      margin-top: 2rem;
-    }
-    .map-container iframe {
-      width: 100%;
-      height: 400px;
-      border: none;
-      display: block;
-    }
-    .map-address {
-      margin-top: 1rem;
-      text-align: center;
-      font-size: 1rem;
-      color: rgba(245, 240, 234, .5);
-    }
-    .map-address strong {
-      color: var(--gold);
-      font-weight: 600;
+      display: flex; align-items: center; gap: 0.8rem;
+      font-size: 0.95rem; color: rgba(245, 240, 234, .7); list-style: none;
     }
 
     /* ── PACKAGES ── */
     .packages-section { background: var(--dusk); text-align: center; }
-    .packages-header { max-width: 580px; margin: 0 auto 3.5rem; }
+    .packages-header { max-width: 580px; margin: 0 auto 3rem; }
     .packages-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; }
     .package-card {
       background: var(--mist); border: 1px solid rgba(255, 255, 255, .07);
@@ -437,52 +329,19 @@ html
     }
     .cta-section .section-title { font-size: clamp(2.2rem, 5vw, 4rem); max-width: 700px; margin: 0 auto 1rem; }
     .cta-section .section-desc { margin: 0 auto 2.5rem; text-align: center; }
-
-    .cta-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 1.5rem;
-      flex-wrap: wrap;
-    }
-
-    .whatsapp-btn, .telegram-btn {
+    .cta-buttons { display: flex; justify-content: center; gap: 1.5rem; flex-wrap: wrap; }
+    .whatsapp-btn {
       display: inline-flex; align-items: center; gap: .75rem;
       color: #fff; padding: 1rem 2.8rem;
       border-radius: 3rem; text-decoration: none;
       font-family: 'Cairo', 'Inter', sans-serif; font-size: 1.1rem; font-weight: 700;
-      transition: transform .25s, box-shadow .25s;
-    }
-    .whatsapp-btn {
       background: #25D366;
       box-shadow: 0 8px 32px rgba(37, 211, 102, .3);
+      transition: transform .25s, box-shadow .25s;
     }
-    .whatsapp-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 14px 40px rgba(37, 211, 102, .45);
-    }
-    .telegram-btn {
-      background: #0088cc;
-      box-shadow: 0 8px 32px rgba(0, 136, 204, .3);
-    }
-    .telegram-btn:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 14px 40px rgba(0, 136, 204, .45);
-    }
-    .telegram-btn .tg-icon {
-      font-size: 1.6rem;
-      line-height: 1;
-    }
-
-    .cta-email {
-      margin-top: 1.5rem;
-      font-size: 1rem;
-      color: rgba(245, 240, 234, .5);
-    }
-    .cta-email a {
-      color: var(--gold);
-      text-decoration: none;
-      transition: color .3s;
-    }
+    .whatsapp-btn:hover { transform: translateY(-3px); box-shadow: 0 14px 40px rgba(37, 211, 102, .45); }
+    .cta-email { margin-top: 1.5rem; font-size: 1rem; color: rgba(245, 240, 234, .5); }
+    .cta-email a { color: var(--gold); text-decoration: none; transition: color .3s; }
     .cta-email a:hover { color: var(--flame); }
 
     /* ── FOOTER ── */
@@ -500,7 +359,6 @@ html
     [dir="ltr"] .section-desc { font-family: 'Inter', sans-serif; }
     [dir="ltr"] body { font-family: 'Inter', sans-serif; }
     [dir="ltr"] .hero-eyebrow, [dir="ltr"] .section-label, [dir="ltr"] nav ul li a { font-family: 'Inter', sans-serif; }
-    [dir="ltr"] .transport-features li::before { content: '🚐'; }
 
     /* ── RESPONSIVE ── */
     @media (max-width: 900px) {
@@ -516,7 +374,6 @@ html
       .stats-band { flex-direction: column; text-align: center; }
       .test-card { min-width: 260px; max-width: 260px; }
       .cta-buttons { flex-direction: column; align-items: center; }
-      .map-container iframe { height: 250px; }
       .video-overlay-text { font-size: .6rem; padding: .3rem 1rem; white-space: normal; }
     }
   </style>
@@ -621,7 +478,6 @@ html
     <div class="experience-section">
       <div class="exp-visual">
         <img src="https://res.cloudinary.com/dyeklznvg/image/upload/v1782283511/1000240640_p0w8h4.jpg" alt="Inside the balloon basket" loading="lazy" />
-        <div class="exp-badge"><strong>100%</strong><span data-i18n="badge_safe"></span></div>
       </div>
       <div>
         <div class="section-label" data-i18n="exp_label"></div>
@@ -656,23 +512,17 @@ html
     </div>
   </section>
 
-  <!-- MAP -->
-  <section class="map-section" id="map">
-    <div style="text-align:center;">
-      <div class="section-label" data-i18n="map_label"></div>
-      <h2 class="section-title" data-i18n="map_title"></h2>
-      <p class="section-desc" style="margin:0 auto;text-align:center;" data-i18n="map_desc"></p>
-    </div>
-    <div class="map-container">
-      <iframe 
-        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d27190.77643518366!2d-8.027559!3d31.629472!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xdafee870d3b7e2b%3A0x3a1c3b5f8e9d7c6a!2sAdventure%20Balloon%20Marrakech%20-%20Hot%20Air%20Balloon%20Agency!5e0!3m2!1sen!2sma!4v1700000000000" 
-        allowfullscreen="" 
-        loading="lazy" 
-        referrerpolicy="no-referrer-when-downgrade">
-      </iframe>
-    </div>
-    <div class="map-address">
-      <span data-i18n="map_address_label"></span> <strong>Adventure Balloon Marrakech - Hot Air Balloon Agency</strong>
+  <!-- ADDRESS ONLY (no map) -->
+  <section style="padding: 3rem 5%; background: var(--night); border-top: 1px solid rgba(255,255,255,.05); text-align:center;" id="map">
+    <div class="section-label" data-i18n="map_label"></div>
+    <h2 class="section-title" style="text-align:center;" data-i18n="map_title"></h2>
+    <p class="section-desc" style="margin:0 auto 1.5rem; text-align:center;" data-i18n="map_desc"></p>
+    <div style="display:inline-flex; align-items:center; gap:.75rem; background:var(--mist); border:1px solid rgba(255,255,255,.08); border-radius:1rem; padding:1.2rem 2rem;">
+      <span style="font-size:1.5rem;">📍</span>
+      <div style="text-align:right;">
+        <div style="font-size:.72rem; letter-spacing:3px; text-transform:uppercase; color:var(--flame); margin-bottom:.3rem;" data-i18n="map_address_label"></div>
+        <strong style="color:var(--gold); font-size:1rem; font-weight:600;">Adventure Balloon Marrakech - Hot Air Balloon Agency</strong>
+      </div>
     </div>
   </section>
 
@@ -737,12 +587,8 @@ html
     <p class="section-desc" data-i18n="cta_desc"></p>
     <div class="cta-buttons">
       <a href="https://wa.me/212663531691" class="whatsapp-btn" target="_blank">
-        <span class="wa-icon">💬</span>
+        <span>💬</span>
         <span data-i18n="whatsapp_btn"></span>
-      </a>
-      <a href="https://t.me/AtlasBallooning" class="telegram-btn" target="_blank">
-        <span class="tg-icon">✈️</span>
-        <span data-i18n="telegram_btn"></span>
       </a>
     </div>
     <div class="cta-email">
@@ -765,7 +611,6 @@ html
   </footer>
 
   <script>
-    // ── TRANSLATIONS ──
     const translations = {
       ar: {
         nav_gallery:"المعرض", nav_experience:"التجربة", nav_packages:"الباقات", nav_book:"احجز الآن",
@@ -777,7 +622,6 @@ html
         video_label:"فيديو تعريفي", video_title:"شاهد <span>تجربة</span> البالون", video_desc:"استمتع بمشاهدة لحظات ساحرة من رحلات البالون الهوائي في سماء مراكش",
         gallery_label:"معرض الصور", gallery_title:"لحظات <span>لا تُعوَّض</span>", gallery_desc:"كل رحلة قصة بصرية فريدة — من لهيب البالون الدافئ إلى الأفق اللانهائي",
         gtag1:"لحظة الإطلاق", gtag2:"علوّ الأسرار", gtag3:"الصحراء من الأعلى", gtag4:"أسطول البالونات",
-        badge_safe:"آمان مُعتمَد",
         exp_label:"لماذا Atlas Ballooning", exp_title:"تجربة <span>استثنائية</span><br/>من البداية للنهاية", exp_desc:"نُصمّم كل تفصيلة بعناية — من استقبالك قبل الفجر حتى احتفالك بعد الهبوط",
         f1_title:"إطلاق عند شروق الشمس", f1_desc:"توقيت مدروس لمنحك أجمل ألوان الأفق وأهدأ الرياح",
         f2_title:"طيارون خبراء مرخّصون", f2_desc:"أكثر من 5000 ساعة طيران لكل قائد — سلامتك أولويتنا",
@@ -785,7 +629,7 @@ html
         f4_title:"تصوير احترافي مشمول", f4_desc:"مصور متخصص يوثّق كل لحظة لتحملها معك للأبد",
         transport_label:"النقل", transport_title:"<span>نقل</span> مريح وآمن", transport_desc:"نوفر لك وسيلة نقل مريحة من وإلى مكان إقامتك لتستمتع برحلتك بدون أي قلق",
         transport_f1:"🚐 استقبال من الفندق أو الرياد", transport_f2:"🚐 عودة آمنة بعد الرحلة", transport_f3:"🚐 سيارات حديثة مع سائقين محترفين",
-        map_label:"الموقع", map_title:"<span>أين</span> نلتقي؟", map_desc:"تجدنا في العنوان التالي — نرحب بك في مغامرة لا تُنسى", map_address_label:"📍 العنوان:",
+        map_label:"الموقع", map_title:"<span>أين</span> نلتقي؟", map_desc:"تجدنا في العنوان التالي — نرحب بك في مغامرة لا تُنسى", map_address_label:"📍 العنوان",
         pkg_label:"باقاتنا", pkg_title:"اختر <span>تجربتك</span>", pkg_desc:"لكل زائر رحلة مصممة خصيصاً",
         pkg1_name:"اكتشاف", pkg2_name:"بريميوم", pkg3_name:"خاص حصري",
         per_person:"/شخص", per_balloon:"/بالون",
@@ -796,8 +640,8 @@ html
         test_label:"آراء ضيوفنا", test_title:"ماذا قالوا عن <span>تجربتهم</span>",
         t1_text:'"تجربة غيّرت مفهومي للسفر. اللحظة التي بدأ البالون يرتفع شعرت أنني في حلم!"',
         t5_text:'"أخذنا العائلة كلها، الأطفال كانوا مبهورين! فريق استثنائي ولحظات لا تُمحى."',
-        cta_label:"تواصل معنا", cta_title:"جاهز لتحليق <span>حلمك</span>؟", cta_desc:"احجز الآن عبر واتساب أو تلغرام — نرد خلال دقائق ونُرتّب كل شيء من أجلك",
-        whatsapp_btn:"واتساب", telegram_btn:"تلغرام", phone_label:"📞 هاتف:", phone_number:"0663531691", available:"متاح 7 أيام في الأسبوع",
+        cta_label:"تواصل معنا", cta_title:"جاهز لتحليق <span>حلمك</span>؟", cta_desc:"احجز الآن عبر واتساب — نرد خلال دقائق ونُرتّب كل شيء من أجلك",
+        whatsapp_btn:"واتساب", phone_label:"📞 هاتف:", phone_number:"0663531691", available:"متاح 7 أيام في الأسبوع",
         footer_copy:"© 2026 Atlas Ballooning — جميع الحقوق محفوظة", footer_privacy:"سياسة الخصوصية", footer_terms:"الشروط والأحكام", footer_contact:"تواصل معنا"
       },
       fr: {
@@ -810,15 +654,14 @@ html
         video_label:"Vidéo", video_title:"Regardez <span>l'expérience</span> en vol", video_desc:"Découvrez des moments magiques de nos vols en montgolfière dans le ciel de Marrakech",
         gallery_label:"Galerie photos", gallery_title:"Instants <span>inoubliables</span>", gallery_desc:"Chaque vol est une histoire visuelle unique — de la flamme chaleureuse à l'horizon sans fin",
         gtag1:"Instant de décollage", gtag2:"Altitude des secrets", gtag3:"Le désert vu du ciel", gtag4:"Flotte de montgolfières",
-        badge_safe:"Sécurité certifiée",
         exp_label:"Pourquoi Atlas Ballooning", exp_title:"Une expérience <span>exceptionnelle</span><br/>du début à la fin", exp_desc:"Nous concevons chaque détail avec soin — de votre accueil avant l'aube jusqu'à votre célébration après l'atterrissage",
         f1_title:"Décollage au lever du soleil", f1_desc:"Un timing étudié pour vous offrir les plus belles couleurs du ciel",
         f2_title:"Pilotes experts certifiés", f2_desc:"Plus de 5 000 heures de vol par pilote — votre sécurité est notre priorité",
         f3_title:"Petit-déjeuner gastronomique", f3_desc:"Célébrez votre vol avec une table raffinée au cœur de la nature",
         f4_title:"Photographie professionnelle incluse", f4_desc:"Un photographe dédié capture chaque instant pour l'éternité",
-        transport_label:"Transport", transport_title:"<span>Transport</span> confortable et sécurisé", transport_desc:"Nous vous proposons un transport confortable depuis et vers votre lieu d'hébergement pour profiter pleinement de votre vol sans aucun souci",
+        transport_label:"Transport", transport_title:"<span>Transport</span> confortable et sécurisé", transport_desc:"Nous vous proposons un transport confortable depuis et vers votre lieu d'hébergement pour profiter pleinement de votre vol",
         transport_f1:"🚐 Prise en charge à l'hôtel ou au riad", transport_f2:"🚐 Retour sécurisé après le vol", transport_f3:"🚐 Véhicules modernes avec chauffeurs professionnels",
-        map_label:"Localisation", map_title:"<span>Où</span> nous trouver?", map_desc:"Vous nous trouverez à l'adresse ci-dessous — nous vous accueillons pour une aventure inoubliable", map_address_label:"📍 Adresse:",
+        map_label:"Localisation", map_title:"<span>Où</span> nous trouver?", map_desc:"Vous nous trouverez à l'adresse ci-dessous — nous vous accueillons pour une aventure inoubliable", map_address_label:"📍 Adresse",
         pkg_label:"Nos forfaits", pkg_title:"Choisissez <span>votre vol</span>", pkg_desc:"Un vol taillé sur mesure pour chaque voyageur",
         pkg1_name:"Découverte", pkg2_name:"Premium", pkg3_name:"Privé Exclusif",
         per_person:"/pers.", per_balloon:"/montgolfière",
@@ -829,8 +672,8 @@ html
         test_label:"Avis de nos voyageurs", test_title:"Ce qu'ils disent de leur <span>expérience</span>",
         t1_text:'"Une expérience qui a changé ma vision du voyage. Le moment où la montgolfière s\'est élevée, j\'étais dans un rêve!"',
         t5_text:'"Toute la famille était émerveillée ! Une équipe extraordinaire et des souvenirs impérissables."',
-        cta_label:"Contactez-nous", cta_title:"Prêt à vivre votre <span>rêve</span> ?", cta_desc:"Réservez maintenant via WhatsApp ou Telegram — nous répondons en quelques minutes et organisons tout pour vous",
-        whatsapp_btn:"WhatsApp", telegram_btn:"Telegram", phone_label:"📞 Tél:", phone_number:"+212 6 63 53 16 91", available:"Disponible 7 jours / 7",
+        cta_label:"Contactez-nous", cta_title:"Prêt à vivre votre <span>rêve</span> ?", cta_desc:"Réservez maintenant via WhatsApp — nous répondons en quelques minutes et organisons tout pour vous",
+        whatsapp_btn:"WhatsApp", phone_label:"📞 Tél:", phone_number:"+212 6 63 53 16 91", available:"Disponible 7 jours / 7",
         footer_copy:"© 2026 Atlas Ballooning — Tous droits réservés", footer_privacy:"Politique de confidentialité", footer_terms:"Conditions générales", footer_contact:"Contact"
       },
       en: {
@@ -843,7 +686,6 @@ html
         video_label:"Video", video_title:"Watch the <span>balloon</span> experience", video_desc:"Enjoy magical moments from our hot air balloon flights over Marrakech's sky",
         gallery_label:"Photo gallery", gallery_title:"<span>Unforgettable</span> moments", gallery_desc:"Every flight is a unique visual story — from the warm balloon flame to the endless horizon",
         gtag1:"Launch moment", gtag2:"Altitude secrets", gtag3:"Desert from above", gtag4:"Balloon fleet",
-        badge_safe:"Certified safety",
         exp_label:"Why Atlas Ballooning", exp_title:"An <span>exceptional</span> experience<br/>from start to finish", exp_desc:"We design every detail with care — from your pre-dawn welcome to your post-landing celebration",
         f1_title:"Sunrise launch", f1_desc:"Perfect timing to give you the most beautiful sky colours and gentlest winds",
         f2_title:"Licensed expert pilots", f2_desc:"Over 5,000 flight hours per pilot — your safety is our top priority",
@@ -851,7 +693,7 @@ html
         f4_title:"Professional photography included", f4_desc:"A dedicated photographer captures every moment for you to keep forever",
         transport_label:"Transport", transport_title:"<span>Comfortable</span> & safe transport", transport_desc:"We provide comfortable transportation from and to your accommodation so you can enjoy your flight without any worries",
         transport_f1:"🚐 Pickup from hotel or riad", transport_f2:"🚐 Safe return after the flight", transport_f3:"🚐 Modern vehicles with professional drivers",
-        map_label:"Location", map_title:"<span>Where</span> to find us?", map_desc:"You can find us at the address below — we welcome you for an unforgettable adventure", map_address_label:"📍 Address:",
+        map_label:"Location", map_title:"<span>Where</span> to find us?", map_desc:"You can find us at the address below — we welcome you for an unforgettable adventure", map_address_label:"📍 Address",
         pkg_label:"Our packages", pkg_title:"Choose your <span>experience</span>", pkg_desc:"A flight designed for every type of traveller",
         pkg1_name:"Discovery", pkg2_name:"Premium", pkg3_name:"Exclusive Private",
         per_person:"/person", per_balloon:"/balloon",
@@ -862,8 +704,8 @@ html
         test_label:"Guest reviews", test_title:"What they said about their <span>experience</span>",
         t1_text:'"An experience that changed the way I think about travel. The moment the balloon lifted, I felt I was in a dream!"',
         t5_text:'"We brought the whole family — the kids were amazed! An extraordinary team and memories that will last forever."',
-        cta_label:"Get in touch", cta_title:"Ready to fly your <span>dream</span>?", cta_desc:"Book now via WhatsApp or Telegram — we reply within minutes and arrange everything for you",
-        whatsapp_btn:"WhatsApp", telegram_btn:"Telegram", phone_label:"📞 Phone:", phone_number:"+212 6 63 53 16 91", available:"Available 7 days a week",
+        cta_label:"Get in touch", cta_title:"Ready to fly your <span>dream</span>?", cta_desc:"Book now via WhatsApp — we reply within minutes and arrange everything for you",
+        whatsapp_btn:"WhatsApp", phone_label:"📞 Phone:", phone_number:"+212 6 63 53 16 91", available:"Available 7 days a week",
         footer_copy:"© 2026 Atlas Ballooning — All rights reserved", footer_privacy:"Privacy policy", footer_terms:"Terms & conditions", footer_contact:"Contact"
       },
       es: {
@@ -876,7 +718,6 @@ html
         video_label:"Vídeo", video_title:"Mira la <span>experiencia</span> en globo", video_desc:"Disfruta de momentos mágicos de nuestros vuelos en globo sobre el cielo de Marrakech",
         gallery_label:"Galería de fotos", gallery_title:"Momentos <span>únicos</span>", gallery_desc:"Cada vuelo es una historia visual única — desde la llama cálida del globo hasta el horizonte infinito",
         gtag1:"Momento del despegue", gtag2:"Secretos a gran altura", gtag3:"El desierto desde arriba", gtag4:"Flota de globos",
-        badge_safe:"Seguridad certificada",
         exp_label:"Por qué Atlas Ballooning", exp_title:"Una experiencia <span>excepcional</span><br/>de principio a fin", exp_desc:"Diseñamos cada detalle con cuidado — desde su bienvenida antes del amanecer hasta la celebración tras el aterrizaje",
         f1_title:"Despegue al amanecer", f1_desc:"Timing perfecto para ofrecerle los colores más bellos del cielo",
         f2_title:"Pilotos expertos certificados", f2_desc:"Más de 5.000 horas de vuelo por piloto — su seguridad es nuestra prioridad",
@@ -884,7 +725,7 @@ html
         f4_title:"Fotografía profesional incluida", f4_desc:"Un fotógrafo dedicado captura cada momento para que lo lleve siempre",
         transport_label:"Transporte", transport_title:"<span>Transporte</span> cómodo y seguro", transport_desc:"Ofrecemos un transporte cómodo desde y hacia su alojamiento para que disfrute de su vuelo sin preocupaciones",
         transport_f1:"🚐 Recogida en el hotel o riad", transport_f2:"🚐 Regreso seguro después del vuelo", transport_f3:"🚐 Vehículos modernos con conductores profesionales",
-        map_label:"Ubicación", map_title:"<span>¿Dónde</span> encontrarnos?", map_desc:"Nos encuentra en la dirección a continuación — le damos la bienvenida para una aventura inolvidable", map_address_label:"📍 Dirección:",
+        map_label:"Ubicación", map_title:"<span>¿Dónde</span> encontrarnos?", map_desc:"Nos encuentra en la dirección a continuación — le damos la bienvenida para una aventura inolvidable", map_address_label:"📍 Dirección",
         pkg_label:"Nuestros paquetes", pkg_title:"Elige tu <span>experiencia</span>", pkg_desc:"Un vuelo diseñado para cada tipo de viajero",
         pkg1_name:"Descubrimiento", pkg2_name:"Premium", pkg3_name:"Privado Exclusivo",
         per_person:"/persona", per_balloon:"/globo",
@@ -895,8 +736,8 @@ html
         test_label:"Opiniones de nuestros viajeros", test_title:"Lo que dijeron de su <span>experiencia</span>",
         t1_text:'"¡Una experiencia que cambió mi forma de ver los viajes! Cuando el globo empezó a subir sentí que volaba en un sueño."',
         t5_text:'"¡Llevamos a toda la familia, los niños estaban fascinados! Un equipo extraordinario y recuerdos para toda la vida."',
-        cta_label:"Contáctenos", cta_title:"¿Listo para volar tu <span>sueño</span>?", cta_desc:"Reserva ahora por WhatsApp o Telegram — respondemos en minutos y organizamos todo por ti",
-        whatsapp_btn:"WhatsApp", telegram_btn:"Telegram", phone_label:"📞 Teléfono:", phone_number:"+212 6 63 53 16 91", available:"Disponible los 7 días de la semana",
+        cta_label:"Contáctenos", cta_title:"¿Listo para volar tu <span>sueño</span>?", cta_desc:"Reserva ahora por WhatsApp — respondemos en minutos y organizamos todo por ti",
+        whatsapp_btn:"WhatsApp", phone_label:"📞 Teléfono:", phone_number:"+212 6 63 53 16 91", available:"Disponible los 7 días de la semana",
         footer_copy:"© 2026 Atlas Ballooning — Todos los derechos reservados", footer_privacy:"Política de privacidad", footer_terms:"Términos y condiciones", footer_contact:"Contacto"
       }
     };
@@ -906,15 +747,12 @@ html
     function setLang(lang) {
       const t = translations[lang];
       if (!t) return;
-
       const isRtl = rtlLangs.includes(lang);
       document.documentElement.setAttribute('dir', isRtl ? 'rtl' : 'ltr');
       document.documentElement.setAttribute('lang', lang);
-
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         if (t[key] !== undefined) {
-          // Handle phone number separately to ensure proper formatting
           if (key === 'phone_number' && lang === 'ar') {
             el.textContent = '0663531691';
           } else {
@@ -922,7 +760,6 @@ html
           }
         }
       });
-
       document.querySelectorAll('.lang-btn').forEach(btn => {
         const btnLang = btn.textContent.trim().toLowerCase();
         const isActive = btnLang === lang || (lang === 'ar' && btnLang === 'عربي');
@@ -930,7 +767,6 @@ html
       });
     }
 
-    // init
     setLang('ar');
   </script>
 
