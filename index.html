@@ -1,10 +1,11 @@
+html
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en" dir="ltr">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Atlas Ballooning — Hot Air Balloon Experience</title>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Cairo:wght@300;400;600;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
     :root {
@@ -19,12 +20,11 @@
     }
     html { scroll-behavior: smooth; }
     body {
-      font-family: 'Cairo', 'Inter', sans-serif;
+      font-family: 'Inter', sans-serif;
       background: var(--night);
       color: var(--smoke);
       overflow-x: hidden;
     }
-    [dir="ltr"] body { font-family: 'Inter', 'Cairo', sans-serif; }
 
     /* ── CONTAINER ── */
     .container {
@@ -42,7 +42,6 @@
       border-bottom: 1px solid var(--border);
       gap: .4rem;
     }
-    [dir="rtl"] .lang-bar { justify-content: flex-start; }
     .lang-btn {
       background: transparent;
       border: 1px solid rgba(255,255,255,.15);
@@ -308,8 +307,7 @@
       border-radius: 1rem; padding: 1.4rem 2.5rem;
       margin-top: 1.5rem;
     }
-    .address-card-text { text-align: right; }
-    [dir="ltr"] .address-card-text { text-align: left; }
+    .address-card-text { text-align: left; }
     .address-sublabel { font-size: .68rem; letter-spacing: 3px; text-transform: uppercase; color: var(--flame); margin-bottom: .3rem; }
     .address-value { color: var(--gold); font-size: 1rem; font-weight: 600; }
 
@@ -325,18 +323,14 @@
       position: relative; overflow: hidden;
       transition: border-color .3s, transform .3s;
     }
-    [dir="rtl"] .package-card { text-align: right; }
-    [dir="ltr"] .package-card { text-align: left; }
     .package-card:hover { border-color: rgba(232,98,42,.35); transform: translateY(-6px); }
     .package-card.featured { border-color: var(--flame); background: linear-gradient(145deg, rgba(232,98,42,.1), rgba(13,10,24,.5)); }
     .featured-badge {
-      position: absolute; top: 1.2rem;
+      position: absolute; top: 1.2rem; right: 1.2rem;
       background: var(--flame); color: #fff;
       font-size: .6rem; font-weight: 700; letter-spacing: 2px; text-transform: uppercase;
       padding: .3rem .8rem; border-radius: 2rem;
     }
-    [dir="rtl"] .featured-badge { left: 1.2rem; }
-    [dir="ltr"] .featured-badge { right: 1.2rem; }
     .pkg-name { font-size: .73rem; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); margin-bottom: .6rem; display: block; }
     .pkg-price { font-family: 'Playfair Display', serif; font-size: 2.8rem; font-weight: 900; color: #fff; line-height: 1; }
     .pkg-price sup { font-size: 1.1rem; vertical-align: super; color: var(--flame); }
@@ -423,7 +417,6 @@
     /* ── RESPONSIVE ── */
     @media (max-width: 1024px) {
       .experience-inner { grid-template-columns: 1fr; gap: 3rem; }
-      [dir="rtl"] .experience-inner { direction: rtl; }
       .exp-visual { aspect-ratio: 16/9; order: -1; }
     }
     @media (max-width: 900px) {
@@ -443,26 +436,25 @@
       .video-overlay-text { display: none; }
       .hero h1 { font-size: 2.6rem; }
       .address-card { flex-direction: column; text-align: center; padding: 1.2rem 1.8rem; }
-      [dir="rtl"] .address-card-text, [dir="ltr"] .address-card-text { text-align: center; }
+      .address-card-text { text-align: center; }
     }
 
     /* ── LTR FONT OVERRIDE ── */
-    [dir="ltr"] .section-desc,
-    [dir="ltr"] nav ul li a,
-    [dir="ltr"] .feature-text p,
-    [dir="ltr"] .feature-text strong,
-    [dir="ltr"] .test-text,
-    [dir="ltr"] .pkg-features li,
-    [dir="ltr"] .transport-features li { font-family: 'Inter', sans-serif; }
+    .section-desc,
+    nav ul li a,
+    .feature-text p,
+    .feature-text strong,
+    .test-text,
+    .pkg-features li,
+    .transport-features li { font-family: 'Inter', sans-serif; }
   </style>
 </head>
 <body>
 
   <!-- LANGUAGE BAR -->
   <div class="lang-bar">
-    <button class="lang-btn active" onclick="setLang('ar')">عربي</button>
+    <button class="lang-btn active" onclick="setLang('en')">EN</button>
     <button class="lang-btn" onclick="setLang('fr')">FR</button>
-    <button class="lang-btn" onclick="setLang('en')">EN</button>
     <button class="lang-btn" onclick="setLang('es')">ES</button>
   </div>
 
@@ -470,10 +462,10 @@
   <nav>
     <a href="#" class="logo">Atlas<span>Ballooning</span></a>
     <ul>
-      <li><a href="#gallery" data-i18n="nav_gallery"></a></li>
-      <li><a href="#experience" data-i18n="nav_experience"></a></li>
-      <li><a href="#packages" data-i18n="nav_packages"></a></li>
-      <li><a href="#contact" class="nav-cta" data-i18n="nav_book"></a></li>
+      <li><a href="#gallery" data-i18n="nav_gallery">Gallery</a></li>
+      <li><a href="#experience" data-i18n="nav_experience">Experience</a></li>
+      <li><a href="#packages" data-i18n="nav_packages">Packages</a></li>
+      <li><a href="#contact" class="nav-cta" data-i18n="nav_book">Book Now</a></li>
     </ul>
   </nav>
 
@@ -486,16 +478,16 @@
     <div class="balloon-float b4"></div>
     <div class="balloon-float b5"></div>
     <div class="hero-content">
-      <div class="hero-eyebrow" data-i18n="hero_eyebrow"></div>
-      <h1 data-i18n="hero_h1"></h1>
-      <p data-i18n="hero_p"></p>
+      <div class="hero-eyebrow" data-i18n="hero_eyebrow">✦ An Unforgettable Experience ✦</div>
+      <h1 data-i18n="hero_h1">Soar Above <br/><em>The Golden Horizon</em></h1>
+      <p data-i18n="hero_p">Luxury hot air balloon rides at sunrise — where the world ends and magic begins</p>
       <div class="hero-btns">
-        <a href="#contact" class="btn-primary" data-i18n="hero_cta1"></a>
-        <a href="#gallery" class="btn-ghost" data-i18n="hero_cta2"></a>
+        <a href="#contact" class="btn-primary" data-i18n="hero_cta1">Book Your Experience</a>
+        <a href="#gallery" class="btn-ghost" data-i18n="hero_cta2">View Gallery</a>
       </div>
     </div>
     <div class="scroll-hint">
-      <span data-i18n="scroll_hint"></span>
+      <span data-i18n="scroll_hint">Discover</span>
       <div class="scroll-line"></div>
     </div>
   </section>
@@ -503,25 +495,25 @@
   <!-- STATS -->
   <div class="stats-band">
     <div class="stats-inner">
-      <div class="stat"><div class="stat-num">4800+</div><div class="stat-label" data-i18n="stat1"></div></div>
-      <div class="stat"><div class="stat-num">62</div><div class="stat-label" data-i18n="stat2"></div></div>
-      <div class="stat"><div class="stat-num">9.8</div><div class="stat-label" data-i18n="stat3"></div></div>
-      <div class="stat"><div class="stat-num">12</div><div class="stat-label" data-i18n="stat4"></div></div>
+      <div class="stat"><div class="stat-num">4800+</div><div class="stat-label" data-i18n="stat1">Successful Flights</div></div>
+      <div class="stat"><div class="stat-num">62</div><div class="stat-label" data-i18n="stat2">Countries Represented</div></div>
+      <div class="stat"><div class="stat-num">9.8</div><div class="stat-label" data-i18n="stat3">Guest Rating / 10</div></div>
+      <div class="stat"><div class="stat-num">12</div><div class="stat-label" data-i18n="stat4">Years of Experience</div></div>
     </div>
   </div>
 
   <!-- VIDEO SECTION -->
   <section class="video-section" id="video">
     <div class="video-header">
-      <span class="section-label" data-i18n="video_label"></span>
-      <h2 class="section-title" data-i18n="video_title"></h2>
-      <p class="section-desc" data-i18n="video_desc"></p>
+      <span class="section-label" data-i18n="video_label">Video</span>
+      <h2 class="section-title" data-i18n="video_title">Watch The <span>Balloon</span> Experience</h2>
+      <p class="section-desc" data-i18n="video_desc">Enjoy magical moments from our hot air balloon flights over Marrakech's sky</p>
     </div>
     <div class="video-container">
       <video autoplay muted loop playsinline>
         <source src="https://res.cloudinary.com/dyeklznvg/video/upload/v1782376045/ADVENTURE_BALLOON_MARRAKECH_pkldat.mp4" type="video/mp4" />
       </video>
-      <div class="video-overlay-text" data-i18n="video_overlay"></div>
+      <div class="video-overlay-text" data-i18n="video_overlay">Atlas Ballooning — Marrakech</div>
     </div>
   </section>
 
@@ -529,26 +521,26 @@
   <section class="gallery-section" id="gallery">
     <div class="gallery-inner">
       <div class="gallery-header">
-        <span class="section-label" data-i18n="gallery_label"></span>
-        <h2 class="section-title" data-i18n="gallery_title"></h2>
-        <p class="section-desc" data-i18n="gallery_desc"></p>
+        <span class="section-label" data-i18n="gallery_label">Photo Gallery</span>
+        <h2 class="section-title" data-i18n="gallery_title"><span>Unforgettable</span> Moments</h2>
+        <p class="section-desc" data-i18n="gallery_desc">Every flight is a unique visual story — from the warm balloon flame to the endless horizon</p>
       </div>
       <div class="gallery-grid">
         <div class="gallery-item">
           <img src="https://res.cloudinary.com/dyeklznvg/image/upload/v1782290594/Discover-our-hot-air-balloon-flights-from-Marrakech_i8lqzi.webp" alt="Hot air balloon Marrakech" loading="lazy" />
-          <div class="gallery-overlay"><span class="gallery-tag" data-i18n="gtag1"></span></div>
+          <div class="gallery-overlay"><span class="gallery-tag" data-i18n="gtag1">Launch Moment</span></div>
         </div>
         <div class="gallery-item">
           <img src="https://res.cloudinary.com/dyeklznvg/image/upload/v1782290561/histoire-montgolfiere_ctrcdw.jpg" alt="Balloon history" loading="lazy" />
-          <div class="gallery-overlay"><span class="gallery-tag" data-i18n="gtag2"></span></div>
+          <div class="gallery-overlay"><span class="gallery-tag" data-i18n="gtag2">Altitude Secrets</span></div>
         </div>
         <div class="gallery-item">
           <img src="https://res.cloudinary.com/dyeklznvg/image/upload/v1782290408/images_1_top4oc.jpg" alt="Balloon flight" loading="lazy" />
-          <div class="gallery-overlay"><span class="gallery-tag" data-i18n="gtag3"></span></div>
+          <div class="gallery-overlay"><span class="gallery-tag" data-i18n="gtag3">Desert From Above</span></div>
         </div>
         <div class="gallery-item">
           <img src="https://res.cloudinary.com/dyeklznvg/image/upload/v1782290408/images_nk8hnt.jpg" alt="Balloon over landscape" loading="lazy" />
-          <div class="gallery-overlay"><span class="gallery-tag" data-i18n="gtag4"></span></div>
+          <div class="gallery-overlay"><span class="gallery-tag" data-i18n="gtag4">Balloon Fleet</span></div>
         </div>
       </div>
     </div>
@@ -561,14 +553,14 @@
         <img src="https://res.cloudinary.com/dyeklznvg/image/upload/v1782472356/FB_IMG_1782472175255_gadidr.jpg" alt="Inside the balloon basket" loading="lazy" />
       </div>
       <div>
-        <span class="section-label" data-i18n="exp_label"></span>
-        <h2 class="section-title" data-i18n="exp_title"></h2>
-        <p class="section-desc" data-i18n="exp_desc"></p>
+        <span class="section-label" data-i18n="exp_label">Why Atlas Ballooning</span>
+        <h2 class="section-title" data-i18n="exp_title">An <span>Exceptional</span> Experience<br/>From Start To Finish</h2>
+        <p class="section-desc" data-i18n="exp_desc">We design every detail with care — from your pre-dawn welcome to your post-landing celebration</p>
         <div class="exp-features">
-          <div class="feature-row"><div class="feature-icon">🌅</div><div class="feature-text"><strong data-i18n="f1_title"></strong><p data-i18n="f1_desc"></p></div></div>
-          <div class="feature-row"><div class="feature-icon">👨‍✈️</div><div class="feature-text"><strong data-i18n="f2_title"></strong><p data-i18n="f2_desc"></p></div></div>
-          <div class="feature-row"><div class="feature-icon">🥂</div><div class="feature-text"><strong data-i18n="f3_title"></strong><p data-i18n="f3_desc"></p></div></div>
-          <div class="feature-row"><div class="feature-icon">📸</div><div class="feature-text"><strong data-i18n="f4_title"></strong><p data-i18n="f4_desc"></p></div></div>
+          <div class="feature-row"><div class="feature-icon">🌅</div><div class="feature-text"><strong data-i18n="f1_title">Sunrise Launch</strong><p data-i18n="f1_desc">Perfect timing to give you the most beautiful sky colours and gentlest winds</p></div></div>
+          <div class="feature-row"><div class="feature-icon">👨‍✈️</div><div class="feature-text"><strong data-i18n="f2_title">Licensed Expert Pilots</strong><p data-i18n="f2_desc">Over 5,000 flight hours per pilot — your safety is our top priority</p></div></div>
+          <div class="feature-row"><div class="feature-icon">🥂</div><div class="feature-text"><strong data-i18n="f3_title">Gourmet Post-Flight Breakfast</strong><p data-i18n="f3_desc">Celebrate your experience with an elegant table in the heart of nature</p></div></div>
+          <div class="feature-row"><div class="feature-icon">📸</div><div class="feature-text"><strong data-i18n="f4_title">Professional Photography Included</strong><p data-i18n="f4_desc">A dedicated photographer captures every moment for you to keep forever</p></div></div>
         </div>
       </div>
     </div>
@@ -581,13 +573,13 @@
         <img src="https://res.cloudinary.com/dyeklznvg/image/upload/v1782302563/5EkT8HkDEwLpFyZ2y0JEJht5rvKo9NIK4mzwfY6D_grf3cj.webp" alt="Transport service" loading="lazy" />
       </div>
       <div>
-        <span class="section-label" data-i18n="transport_label"></span>
-        <h2 class="section-title" data-i18n="transport_title"></h2>
-        <p class="section-desc" data-i18n="transport_desc"></p>
+        <span class="section-label" data-i18n="transport_label">Transport</span>
+        <h2 class="section-title" data-i18n="transport_title"><span>Comfortable</span> & Safe Transport</h2>
+        <p class="section-desc" data-i18n="transport_desc">We provide comfortable transportation from and to your accommodation so you can enjoy your flight without any worries</p>
         <ul class="transport-features">
-          <li data-i18n="transport_f1"></li>
-          <li data-i18n="transport_f2"></li>
-          <li data-i18n="transport_f3"></li>
+          <li data-i18n="transport_f1">🚐 Pickup from hotel or riad</li>
+          <li data-i18n="transport_f2">🚐 Safe return after the flight</li>
+          <li data-i18n="transport_f3">🚐 Modern vehicles with professional drivers</li>
         </ul>
       </div>
     </div>
@@ -596,13 +588,13 @@
   <!-- ADDRESS -->
   <section class="address-section" id="map">
     <div>
-      <span class="section-label" style="display:block;text-align:center;" data-i18n="map_label"></span>
-      <h2 class="section-title" style="text-align:center;" data-i18n="map_title"></h2>
-      <p class="section-desc" style="max-width:500px;margin:0 auto;" data-i18n="map_desc"></p>
+      <span class="section-label" style="display:block;text-align:center;" data-i18n="map_label">Location</span>
+      <h2 class="section-title" style="text-align:center;" data-i18n="map_title"><span>Where</span> To Find Us?</h2>
+      <p class="section-desc" style="max-width:500px;margin:0 auto;" data-i18n="map_desc">You can find us at the address below — we welcome you for an unforgettable adventure</p>
       <div class="address-card">
         <span style="font-size:1.8rem;">📍</span>
         <div class="address-card-text">
-          <div class="address-sublabel" data-i18n="map_address_label"></div>
+          <div class="address-sublabel" data-i18n="map_address_label">Address</div>
           <strong class="address-value">Ouled El Garne, Bourouss, Morocco</strong>
         </div>
       </div>
@@ -613,38 +605,38 @@
   <section class="packages-section" id="packages">
     <div class="packages-inner">
       <div class="packages-header">
-        <span class="section-label" data-i18n="pkg_label"></span>
-        <h2 class="section-title" data-i18n="pkg_title"></h2>
-        <p class="section-desc" data-i18n="pkg_desc"></p>
+        <span class="section-label" data-i18n="pkg_label">Our Packages</span>
+        <h2 class="section-title" data-i18n="pkg_title">Choose Your <span>Experience</span></h2>
+        <p class="section-desc" data-i18n="pkg_desc">A flight designed for every type of traveller</p>
       </div>
       <div class="packages-grid">
         <div class="package-card">
-          <span class="pkg-name" data-i18n="pkg1_name"></span>
-          <div class="pkg-price"><sup>$</sup>180<span class="price-suffix" data-i18n="per_person"></span></div>
+          <span class="pkg-name" data-i18n="pkg1_name">Discovery</span>
+          <div class="pkg-price"><sup>$</sup>180<span class="price-suffix" data-i18n="per_person"> /person</span></div>
           <div class="pkg-divider"></div>
           <ul class="pkg-features">
-            <li data-i18n="p1_f1"></li><li data-i18n="p1_f2"></li><li data-i18n="p1_f3"></li><li data-i18n="p1_f4"></li>
+            <li data-i18n="p1_f1">60-minute flight</li><li data-i18n="p1_f2">Sunrise launch</li><li data-i18n="p1_f3">Light breakfast</li><li data-i18n="p1_f4">Flight certificate</li>
           </ul>
-          <a href="#contact" class="pkg-btn pkg-btn-outline" data-i18n="book_now"></a>
+          <a href="#contact" class="pkg-btn pkg-btn-outline" data-i18n="book_now">Book Now</a>
         </div>
         <div class="package-card featured">
-          <span class="featured-badge" data-i18n="most_popular"></span>
-          <span class="pkg-name" data-i18n="pkg2_name"></span>
-          <div class="pkg-price"><sup>$</sup>320<span class="price-suffix" data-i18n="per_person"></span></div>
+          <span class="featured-badge" data-i18n="most_popular">Most Popular</span>
+          <span class="pkg-name" data-i18n="pkg2_name">Premium</span>
+          <div class="pkg-price"><sup>$</sup>320<span class="price-suffix" data-i18n="per_person"> /person</span></div>
           <div class="pkg-divider"></div>
           <ul class="pkg-features">
-            <li data-i18n="p2_f1"></li><li data-i18n="p2_f2"></li><li data-i18n="p2_f3"></li><li data-i18n="p2_f4"></li><li data-i18n="p2_f5"></li>
+            <li data-i18n="p2_f1">90-minute flight</li><li data-i18n="p2_f2">Private area in the basket</li><li data-i18n="p2_f3">Gourmet breakfast on the ground</li><li data-i18n="p2_f4">Professional photography included</li><li data-i18n="p2_f5">Champagne at landing</li>
           </ul>
-          <a href="#contact" class="pkg-btn pkg-btn-filled" data-i18n="book_now"></a>
+          <a href="#contact" class="pkg-btn pkg-btn-filled" data-i18n="book_now">Book Now</a>
         </div>
         <div class="package-card">
-          <span class="pkg-name" data-i18n="pkg3_name"></span>
-          <div class="pkg-price"><sup>$</sup>950<span class="price-suffix" data-i18n="per_balloon"></span></div>
+          <span class="pkg-name" data-i18n="pkg3_name">Exclusive Private</span>
+          <div class="pkg-price"><sup>$</sup>950<span class="price-suffix" data-i18n="per_balloon"> /balloon</span></div>
           <div class="pkg-divider"></div>
           <ul class="pkg-features">
-            <li data-i18n="p3_f1"></li><li data-i18n="p3_f2"></li><li data-i18n="p3_f3"></li><li data-i18n="p3_f4"></li><li data-i18n="p3_f5"></li>
+            <li data-i18n="p3_f1">Full balloon for your group</li><li data-i18n="p3_f2">Flexible flight up to 120 minutes</li><li data-i18n="p3_f3">Customised route</li><li data-i18n="p3_f4">Aerial + ground photography</li><li data-i18n="p3_f5">Luxury private banquet</li>
           </ul>
-          <a href="#contact" class="pkg-btn pkg-btn-outline" data-i18n="contact_us"></a>
+          <a href="#contact" class="pkg-btn pkg-btn-outline" data-i18n="contact_us">Contact Us</a>
         </div>
       </div>
     </div>
@@ -654,35 +646,36 @@
   <section id="reviews" class="testimonials-section">
     <div class="testimonials-inner">
       <div class="test-header">
-        <span class="section-label" data-i18n="test_label"></span>
-        <h2 class="section-title" data-i18n="test_title"></h2>
+        <span class="section-label" data-i18n="test_label">Guest Reviews</span>
+        <h2 class="section-title" data-i18n="test_title">What They Said About Their <span>Experience</span></h2>
       </div>
       <div class="test-track">
-        <div class="test-card"><div class="test-stars">★★★★★</div><p class="test-text" data-i18n="t1_text"></p><div class="test-author"><div class="test-avatar">س</div><div class="test-author-info"><strong>سارة الأحمد</strong><span>🇸🇦 Riyadh</span></div></div></div>
+        <div class="test-card"><div class="test-stars">★★★★★</div><p class="test-text" data-i18n="t1_text">"An experience that changed the way I think about travel. The moment the balloon lifted, I felt I was in a dream!"</p><div class="test-author"><div class="test-avatar">S</div><div class="test-author-info"><strong>Sarah A.</strong><span>🇸🇦 Riyadh</span></div></div></div>
         <div class="test-card"><div class="test-stars">★★★★★</div><p class="test-text">"Absolutely magical! The staff was professional and warm. The sunrise balloon flight was the highlight of our honeymoon."</p><div class="test-author"><div class="test-avatar">J</div><div class="test-author-info"><strong>James & Emily</strong><span>🇬🇧 London</span></div></div></div>
         <div class="test-card"><div class="test-stars">★★★★★</div><p class="test-text">"Une expérience sublime! Le vol au lever du soleil était à couper le souffle. Je recommande chaleureusement."</p><div class="test-author"><div class="test-avatar">L</div><div class="test-author-info"><strong>Laure Moreau</strong><span>🇫🇷 Paris</span></div></div></div>
         <div class="test-card"><div class="test-stars">★★★★★</div><p class="test-text">"¡Una experiencia increíble! El amanecer desde el globo fue impresionante. Todo el equipo fue muy profesional."</p><div class="test-author"><div class="test-avatar">M</div><div class="test-author-info"><strong>María González</strong><span>🇪🇸 Madrid</span></div></div></div>
-        <div class="test-card"><div class="test-stars">★★★★★</div><p class="test-text" data-i18n="t5_text"></p><div class="test-author"><div class="test-avatar">م</div><div class="test-author-info"><strong>محمد التونسي</strong><span>🇹🇳 Tunis</span></div></div></div>
+        <div class="test-card"><div class="test-stars">★★★★★</div><p class="test-text" data-i18n="t5_text">"We brought the whole family — the kids were amazed! An extraordinary team and memories that will last forever."</p><div class="test-author"><div class="test-avatar">M</div><div class="test-author-info"><strong>Mohamed T.</strong><span>🇹🇳 Tunis</span></div></div></div>
+        <div class="test-card"><div class="test-stars">★★★★★</div><p class="test-text">"Highly recommended! The views were breathtaking, and the pilots made us feel completely safe and well-cared for."</p><div class="test-author"><div class="test-avatar">A</div><div class="test-author-info"><strong>Anna K.</strong><span>🇩🇪 Berlin</span></div></div></div>
       </div>
     </div>
   </section>
 
   <!-- CTA -->
   <section class="cta-section" id="contact">
-    <span class="section-label" style="display:block;" data-i18n="cta_label"></span>
-    <h2 class="section-title" data-i18n="cta_title"></h2>
-    <p class="section-desc" data-i18n="cta_desc"></p>
+    <span class="section-label" style="display:block;" data-i18n="cta_label">Get In Touch</span>
+    <h2 class="section-title" data-i18n="cta_title">Ready To Fly Your <span>Dream</span>?</h2>
+    <p class="section-desc" data-i18n="cta_desc">Book now via WhatsApp — we reply within minutes and arrange everything for you</p>
     <div class="cta-buttons">
       <a href="https://wa.me/212663531691" class="whatsapp-btn" target="_blank">
         <span>💬</span>
-        <span data-i18n="whatsapp_btn"></span>
+        <span data-i18n="whatsapp_btn">WhatsApp</span>
       </a>
     </div>
     <div class="cta-email">
       📧 <a href="mailto:emailconsulting3600@gmail.com">emailconsulting3600@gmail.com</a>
     </div>
     <p class="cta-phone">
-      <span data-i18n="phone_label"></span> <span data-i18n="phone_number"></span> &nbsp;·&nbsp; <span data-i18n="available"></span>
+      <span data-i18n="phone_label">📞 Phone:</span> <span data-i18n="phone_number">+212 6 63 53 16 91</span> &nbsp;·&nbsp; <span data-i18n="available">Available 7 days a week</span>
     </p>
   </section>
 
@@ -690,48 +683,48 @@
   <footer>
     <div class="footer-inner">
       <a href="#" class="logo" style="font-size:1.2rem;">Atlas<span>Ballooning</span></a>
-      <p data-i18n="footer_copy"></p>
+      <p data-i18n="footer_copy">© 2026 Atlas Ballooning — All rights reserved</p>
       <div class="footer-links">
-        <a href="#" data-i18n="footer_privacy"></a>
-        <a href="#" data-i18n="footer_terms"></a>
-        <a href="#contact" data-i18n="footer_contact"></a>
+        <a href="#" data-i18n="footer_privacy">Privacy Policy</a>
+        <a href="#" data-i18n="footer_terms">Terms & Conditions</a>
+        <a href="#contact" data-i18n="footer_contact">Contact</a>
       </div>
     </div>
   </footer>
 
   <script>
     const translations = {
-      ar: {
-        nav_gallery:"المعرض", nav_experience:"التجربة", nav_packages:"الباقات", nav_book:"احجز الآن",
-        hero_eyebrow:"✦ تجربة لا تُنسى ✦",
-        hero_h1:"حلّق فوق<br/><em>الأفق الذهبي</em>",
-        hero_p:"رحلات بالون هوائي فاخرة عند شروق الشمس — حيث ينتهي العالم ويبدأ السحر",
-        hero_cta1:"احجز تجربتك الآن", hero_cta2:"شاهد المعرض", scroll_hint:"اكتشف",
-        stat1:"رحلة ناجحة", stat2:"دولة تمثّل ضيوفنا", stat3:"تقييم الضيوف / 10", stat4:"سنة خبرة",
-        video_label:"فيديو تعريفي", video_title:"شاهد <span>تجربة</span> البالون", video_desc:"استمتع بمشاهدة لحظات ساحرة من رحلات البالون الهوائي في سماء مراكش", video_overlay:"أطلس بالونينج — مراكش",
-        gallery_label:"معرض الصور", gallery_title:"لحظات <span>لا تُعوَّض</span>", gallery_desc:"كل رحلة قصة بصرية فريدة — من لهيب البالون الدافئ إلى الأفق اللانهائي",
-        gtag1:"لحظة الإطلاق", gtag2:"علوّ الأسرار", gtag3:"الصحراء من الأعلى", gtag4:"أسطول البالونات",
-        exp_label:"لماذا Atlas Ballooning", exp_title:"تجربة <span>استثنائية</span><br/>من البداية للنهاية", exp_desc:"نُصمّم كل تفصيلة بعناية — من استقبالك قبل الفجر حتى احتفالك بعد الهبوط",
-        f1_title:"إطلاق عند شروق الشمس", f1_desc:"توقيت مدروس لمنحك أجمل ألوان الأفق وأهدأ الرياح",
-        f2_title:"طيارون خبراء مرخّصون", f2_desc:"أكثر من 5000 ساعة طيران لكل قائد — سلامتك أولويتنا",
-        f3_title:"إفطار فاخر بعد الهبوط", f3_desc:"احتفل بتجربتك بمائدة راقية في قلب الطبيعة",
-        f4_title:"تصوير احترافي مشمول", f4_desc:"مصور متخصص يوثّق كل لحظة لتحملها معك للأبد",
-        transport_label:"النقل", transport_title:"<span>نقل</span> مريح وآمن", transport_desc:"نوفر لك وسيلة نقل مريحة من وإلى مكان إقامتك لتستمتع برحلتك بدون أي قلق",
-        transport_f1:"🚐 استقبال من الفندق أو الرياد", transport_f2:"🚐 عودة آمنة بعد الرحلة", transport_f3:"🚐 سيارات حديثة مع سائقين محترفين",
-        map_label:"الموقع", map_title:"<span>أين</span> نلتقي؟", map_desc:"تجدنا في العنوان التالي — نرحب بك في مغامرة لا تُنسى", map_address_label:"📍 العنوان",
-        pkg_label:"باقاتنا", pkg_title:"اختر <span>تجربتك</span>", pkg_desc:"لكل زائر رحلة مصممة خصيصاً",
-        pkg1_name:"اكتشاف", pkg2_name:"بريميوم", pkg3_name:"خاص حصري",
-        per_person:" / شخص", per_balloon:" / بالون",
-        p1_f1:"رحلة 60 دقيقة", p1_f2:"إطلاق عند الشروق", p1_f3:"إفطار خفيف", p1_f4:"شهادة طيران",
-        p2_f1:"رحلة 90 دقيقة", p2_f2:"منطقة خاصة في البالون", p2_f3:"إفطار فاخر على الأرض", p2_f4:"تصوير احترافي مشمول", p2_f5:"شامبانيا عند الهبوط",
-        p3_f1:"بالون كامل لمجموعتك", p3_f2:"رحلة مرنة حتى 120 دقيقة", p3_f3:"مسار مخصص حسب رغبتك", p3_f4:"تصوير جوي + أرضي", p3_f5:"مأدبة خاصة فاخرة",
-        most_popular:"الأكثر طلباً", book_now:"احجز الآن", contact_us:"تواصل معنا",
-        test_label:"آراء ضيوفنا", test_title:"ماذا قالوا عن <span>تجربتهم</span>",
-        t1_text:'"تجربة غيّرت مفهومي للسفر. اللحظة التي بدأ البالون يرتفع شعرت أنني في حلم!"',
-        t5_text:'"أخذنا العائلة كلها، الأطفال كانوا مبهورين! فريق استثنائي ولحظات لا تُمحى."',
-        cta_label:"تواصل معنا", cta_title:"جاهز لتحليق <span>حلمك</span>؟", cta_desc:"احجز الآن عبر واتساب — نرد خلال دقائق ونُرتّب كل شيء من أجلك",
-        whatsapp_btn:"واتساب", phone_label:"📞 هاتف:", phone_number:"0663531691", available:"متاح 7 أيام في الأسبوع",
-        footer_copy:"© 2026 Atlas Ballooning — جميع الحقوق محفوظة", footer_privacy:"سياسة الخصوصية", footer_terms:"الشروط والأحكام", footer_contact:"تواصل معنا"
+      en: {
+        nav_gallery:"Gallery", nav_experience:"Experience", nav_packages:"Packages", nav_book:"Book Now",
+        hero_eyebrow:"✦ An unforgettable experience ✦",
+        hero_h1:"Soar above<br/><em>the golden horizon</em>",
+        hero_p:"Luxury hot air balloon rides at sunrise — where the world ends and magic begins",
+        hero_cta1:"Book your experience", hero_cta2:"View gallery", scroll_hint:"Discover",
+        stat1:"Successful flights", stat2:"Countries represented", stat3:"Guest rating / 10", stat4:"Years of experience",
+        video_label:"Video", video_title:"Watch the <span>balloon</span> experience", video_desc:"Enjoy magical moments from our hot air balloon flights over Marrakech's sky", video_overlay:"Atlas Ballooning — Marrakech",
+        gallery_label:"Photo gallery", gallery_title:"<span>Unforgettable</span> moments", gallery_desc:"Every flight is a unique visual story — from the warm balloon flame to the endless horizon",
+        gtag1:"Launch moment", gtag2:"Altitude secrets", gtag3:"Desert from above", gtag4:"Balloon fleet",
+        exp_label:"Why Atlas Ballooning", exp_title:"An <span>exceptional</span> experience<br/>from start to finish", exp_desc:"We design every detail with care — from your pre-dawn welcome to your post-landing celebration",
+        f1_title:"Sunrise launch", f1_desc:"Perfect timing to give you the most beautiful sky colours and gentlest winds",
+        f2_title:"Licensed expert pilots", f2_desc:"Over 5,000 flight hours per pilot — your safety is our top priority",
+        f3_title:"Gourmet post-flight breakfast", f3_desc:"Celebrate your experience with an elegant table in the heart of nature",
+        f4_title:"Professional photography included", f4_desc:"A dedicated photographer captures every moment for you to keep forever",
+        transport_label:"Transport", transport_title:"<span>Comfortable</span> & safe transport", transport_desc:"We provide comfortable transportation from and to your accommodation so you can enjoy your flight without any worries",
+        transport_f1:"🚐 Pickup from hotel or riad", transport_f2:"🚐 Safe return after the flight", transport_f3:"🚐 Modern vehicles with professional drivers",
+        map_label:"Location", map_title:"<span>Where</span> to find us?", map_desc:"You can find us at the address below — we welcome you for an unforgettable adventure", map_address_label:"📍 Address",
+        pkg_label:"Our packages", pkg_title:"Choose your <span>experience</span>", pkg_desc:"A flight designed for every type of traveller",
+        pkg1_name:"Discovery", pkg2_name:"Premium", pkg3_name:"Exclusive Private",
+        per_person:" /person", per_balloon:" /balloon",
+        p1_f1:"60-minute flight", p1_f2:"Sunrise launch", p1_f3:"Light breakfast", p1_f4:"Flight certificate",
+        p2_f1:"90-minute flight", p2_f2:"Private area in the basket", p2_f3:"Gourmet breakfast on the ground", p2_f4:"Professional photography included", p2_f5:"Champagne at landing",
+        p3_f1:"Full balloon for your group", p3_f2:"Flexible flight up to 120 minutes", p3_f3:"Customised route", p3_f4:"Aerial + ground photography", p3_f5:"Luxury private banquet",
+        most_popular:"Most popular", book_now:"Book now", contact_us:"Contact us",
+        test_label:"Guest reviews", test_title:"What they said about their <span>experience</span>",
+        t1_text:'"An experience that changed the way I think about travel. The moment the balloon lifted, I felt I was in a dream!"',
+        t5_text:'"We brought the whole family — the kids were amazed! An extraordinary team and memories that will last forever."',
+        cta_label:"Get in touch", cta_title:"Ready to fly your <span>dream</span>?", cta_desc:"Book now via WhatsApp — we reply within minutes and arrange everything for you",
+        whatsapp_btn:"WhatsApp", phone_label:"📞 Phone:", phone_number:"+212 6 63 53 16 91", available:"Available 7 days a week",
+        footer_copy:"© 2026 Atlas Ballooning — All rights reserved", footer_privacy:"Privacy policy", footer_terms:"Terms & conditions", footer_contact:"Contact"
       },
       fr: {
         nav_gallery:"Galerie", nav_experience:"Expérience", nav_packages:"Forfaits", nav_book:"Réserver",
@@ -764,38 +757,6 @@
         cta_label:"Contactez-nous", cta_title:"Prêt à vivre votre <span>rêve</span> ?", cta_desc:"Réservez maintenant via WhatsApp — nous répondons en quelques minutes et organisons tout pour vous",
         whatsapp_btn:"WhatsApp", phone_label:"📞 Tél:", phone_number:"+212 6 63 53 16 91", available:"Disponible 7 jours / 7",
         footer_copy:"© 2026 Atlas Ballooning — Tous droits réservés", footer_privacy:"Politique de confidentialité", footer_terms:"Conditions générales", footer_contact:"Contact"
-      },
-      en: {
-        nav_gallery:"Gallery", nav_experience:"Experience", nav_packages:"Packages", nav_book:"Book Now",
-        hero_eyebrow:"✦ An unforgettable experience ✦",
-        hero_h1:"Soar above<br/><em>the golden horizon</em>",
-        hero_p:"Luxury hot air balloon rides at sunrise — where the world ends and magic begins",
-        hero_cta1:"Book your experience", hero_cta2:"View gallery", scroll_hint:"Discover",
-        stat1:"Successful flights", stat2:"Countries represented", stat3:"Guest rating / 10", stat4:"Years of experience",
-        video_label:"Video", video_title:"Watch the <span>balloon</span> experience", video_desc:"Enjoy magical moments from our hot air balloon flights over Marrakech's sky", video_overlay:"Atlas Ballooning — Marrakech",
-        gallery_label:"Photo gallery", gallery_title:"<span>Unforgettable</span> moments", gallery_desc:"Every flight is a unique visual story — from the warm balloon flame to the endless horizon",
-        gtag1:"Launch moment", gtag2:"Altitude secrets", gtag3:"Desert from above", gtag4:"Balloon fleet",
-        exp_label:"Why Atlas Ballooning", exp_title:"An <span>exceptional</span> experience<br/>from start to finish", exp_desc:"We design every detail with care — from your pre-dawn welcome to your post-landing celebration",
-        f1_title:"Sunrise launch", f1_desc:"Perfect timing to give you the most beautiful sky colours and gentlest winds",
-        f2_title:"Licensed expert pilots", f2_desc:"Over 5,000 flight hours per pilot — your safety is our top priority",
-        f3_title:"Gourmet post-flight breakfast", f3_desc:"Celebrate your experience with an elegant table in the heart of nature",
-        f4_title:"Professional photography included", f4_desc:"A dedicated photographer captures every moment for you to keep forever",
-        transport_label:"Transport", transport_title:"<span>Comfortable</span> & safe transport", transport_desc:"We provide comfortable transportation from and to your accommodation so you can enjoy your flight without any worries",
-        transport_f1:"🚐 Pickup from hotel or riad", transport_f2:"🚐 Safe return after the flight", transport_f3:"🚐 Modern vehicles with professional drivers",
-        map_label:"Location", map_title:"<span>Where</span> to find us?", map_desc:"You can find us at the address below — we welcome you for an unforgettable adventure", map_address_label:"📍 Address",
-        pkg_label:"Our packages", pkg_title:"Choose your <span>experience</span>", pkg_desc:"A flight designed for every type of traveller",
-        pkg1_name:"Discovery", pkg2_name:"Premium", pkg3_name:"Exclusive Private",
-        per_person:" /person", per_balloon:" /balloon",
-        p1_f1:"60-minute flight", p1_f2:"Sunrise launch", p1_f3:"Light breakfast", p1_f4:"Flight certificate",
-        p2_f1:"90-minute flight", p2_f2:"Private area in the basket", p2_f3:"Gourmet breakfast on the ground", p2_f4:"Professional photography included", p2_f5:"Champagne at landing",
-        p3_f1:"Full balloon for your group", p3_f2:"Flexible flight up to 120 minutes", p3_f3:"Customised route", p3_f4:"Aerial + ground photography", p3_f5:"Luxury private banquet",
-        most_popular:"Most popular", book_now:"Book now", contact_us:"Contact us",
-        test_label:"Guest reviews", test_title:"What they said about their <span>experience</span>",
-        t1_text:'"An experience that changed the way I think about travel. The moment the balloon lifted, I felt I was in a dream!"',
-        t5_text:'"We brought the whole family — the kids were amazed! An extraordinary team and memories that will last forever."',
-        cta_label:"Get in touch", cta_title:"Ready to fly your <span>dream</span>?", cta_desc:"Book now via WhatsApp — we reply within minutes and arrange everything for you",
-        whatsapp_btn:"WhatsApp", phone_label:"📞 Phone:", phone_number:"+212 6 63 53 16 91", available:"Available 7 days a week",
-        footer_copy:"© 2026 Atlas Ballooning — All rights reserved", footer_privacy:"Privacy policy", footer_terms:"Terms & conditions", footer_contact:"Contact"
       },
       es: {
         nav_gallery:"Galería", nav_experience:"Experiencia", nav_packages:"Paquetes", nav_book:"Reservar",
@@ -831,13 +792,10 @@
       }
     };
 
-    const rtlLangs = ['ar'];
-
     function setLang(lang) {
       const t = translations[lang];
       if (!t) return;
-      const isRtl = rtlLangs.includes(lang);
-      document.documentElement.setAttribute('dir', isRtl ? 'rtl' : 'ltr');
+      document.documentElement.setAttribute('dir', 'ltr');
       document.documentElement.setAttribute('lang', lang);
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
@@ -852,7 +810,7 @@
       });
     }
 
-    setLang('ar');
+    setLang('en');
   </script>
 </body>
 </html>
